@@ -1,0 +1,497 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{513E72A6-1F92-4639-906C-F2DA520B4117}</ProjectGuid>
+        <MainSource>Inmosys.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <ProjectVersion>16.1</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>Inmosys</SanitizedProjectName>
+        <DCC_N>false</DCC_N>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;Bde;System.Win;IBX;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_K>false</DCC_K>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <VerInfo_Locale>11274</VerInfo_Locale>
+        <DCC_S>false</DCC_S>
+        <DCC_F>false</DCC_F>
+        <DCC_E>false</DCC_E>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=</VerInfo_Keys>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Optimize>false</DCC_Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="..\frm\frmdatos.pas">
+            <Form>DM</Form>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmlogin.pas">
+            <Form>frmClave</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmprincipal.pas">
+            <Form>fPrincipal</Form>
+        </DCCReference>
+        <DCCReference Include="..\unit\Declaraciones.pas"/>
+        <DCCReference Include="..\unit\Funciones.pas"/>
+        <DCCReference Include="..\frm\frmInmuebles.pas">
+            <Form>fInmuebles</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmMovimientosCtactePropietario.pas">
+            <Form>fMovimientosCtaCtePropietario</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\voDispositivos.pas">
+            <Form>fmDispositivos</Form>
+        </DCCReference>
+        <DCCReference Include="..\unit\Graficos.pas"/>
+        <DCCReference Include="..\frm\frmABMCtaCtePropietarios.pas">
+            <Form>fAbMCtaCtePropietarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmautomatizacion.pas">
+            <Form>fAutomatizacion</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmgenautom.pas">
+            <Form>fgenautom</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmmovimientos.pas">
+            <Form>fMovimientos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMNovedades.pas">
+            <Form>fAbmNovedades</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmnotas.pas">
+            <Form>fNotas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmnotaswindows.pas">
+            <Form>fNotaWindows</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\recrinm.pas">
+            <Form>frecrinm</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\recsinmvta.pas">
+            <Form>frecSinmvta</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmReciboLocatarioSaliente.pas">
+            <Form>FReciboLocatarioSaliente</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\recrinmvta.pas">
+            <Form>frecrinmvta</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\liqin.pas">
+            <Form>FrmLiquidacionInquilinos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmConfirmacionFacturas.pas">
+            <Form>fConfirmacionFacturas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMPorcentajesCobro.pas">
+            <Form>fABMPorcentajeCobroImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmFacturaA.pas">
+            <Form>FFacturaA</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLiquidacionParaPropietarios.pas">
+            <Form>FrmLiquidacionPropietarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevaAsignacionPorcentajes.pas">
+            <Form>fPorcentajesCobro</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmPlanillaCaja.pas">
+            <Form>fPlanillaCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCambioAlquiler.pas">
+            <Form>fCambioAlquiler</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRubrosDatosFijos.pas">
+            <Form>FRubroDatosFijos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmframeCajas.pas">
+            <Form>fraCaja</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmImpuestosPendientes.pas">
+            <Form>fImpuestosPendientes</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLibroIVAVentas.pas">
+            <Form>fLibroIVAVentas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLiquidacionesHistoricas.pas">
+            <Form>fLiquidacionesHistoricas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmclavecaja.pas">
+            <Form>fClaveCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\objLiquidaciones.pas"/>
+        <DCCReference Include="..\frm\frmABMUsuarios.pas">
+            <Form>fAbmUsuarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmSobres.pas">
+            <Form>FSobres</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialCaja.pas">
+            <Form>fHistorialCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCierresCaja.pas">
+            <Form>fCierresCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoDeudaPropietarios.pas">
+            <Form>fListadoDeudaPropietarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmMovimientosCtacte.pas">
+            <Form>fMovimientosCtaCte</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMCtaCteInquilinos.pas">
+            <Form>fAbMCtaCteInquilinos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialEntregaLiquidaciones.pas">
+            <Form>fHistorialEntregaLiquidaciones</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoComisionesCobradas.pas">
+            <Form>fListadoComisionesCobradas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialCobroInquilinos.pas">
+            <Form>fHistorialCobroInquilinos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialPagoInquilinos.pas">
+            <Form>fHistorialPagoInquilinos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialRetiroLiquidaciones.pas">
+            <Form>fHistorialRetiroLiquidaciones</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoDeudaInquilinos.pas">
+            <Form>fListadoDeudaInquilinos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmVerBackupDatos.pas">
+            <Form>fVerBackupDatos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmAlicuotasIVA.pas">
+            <Form>fAlicuotasIVA</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmValeCaja.pas">
+            <Form>fValeCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLiquidacionComisiones.pas">
+            <Form>fLiquidacionComisiones</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmFacturaB.pas">
+            <Form>FFacturaB</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmConfirmacionRecibos.pas">
+            <Form>fConfirmacionRecibos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmInformeReciboLiquidacion.pas">
+            <Form>fInformeReciboLiquidacion</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmConsultaSobre.pas">
+            <Form>fConsultarSobre</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCompensarConcepto.pas">
+            <Form>fCompensarConcepto</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmDatosFijos.pas">
+            <Form>fDatosfijos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMImpuestosYServicios.pas">
+            <Form>fABMImpuestosyServicios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoImpuesto.pas">
+            <Form>fNuevoImpuesto</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frameInquilinos.pas">
+            <Form>Frame1</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMGeneracionMovimientos.pas">
+            <Form>fABMGeneracionMovimientos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoMovimientoImpuestos.pas">
+            <Form>fNuevoMovimientoImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmActualizacionContratosEscalonados.pas">
+            <Form>fNuevoMovimientoImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmProgreso.pas">
+            <Form>fProgreso</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCodigosBarras.pas">
+            <Form>fCodigosBarras</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmModificacionRentas.pas">
+            <Form>FModificacionRentas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCargaNovedades.pas">
+            <Form>fCargaNovedades</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMInmuebles.pas">
+            <Form>fAbmInmuebles</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoCobrados.pas">
+            <Form>fListadoCobrados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoComisiones.pas">
+            <Form>fListadoComisiones</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMActualizacionValores.pas">
+            <Form>fABMActualizacionValores</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ListadoImpuestosYServicios.pas">
+            <Form>fListadoImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevaDevolucionDinero.pas">
+            <Form>fNuevaDevolucionDinero</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmInformeImpuestosPagados.pas">
+            <Form>fInformeImpuestosPagados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoImpuestosFiltrados.pas">
+            <Form>fListadoImpuestosFiltrados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMImpuestosPagados.pas">
+            <Form>fABMImpuestosPagados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoCedulonPagado.pas">
+            <Form>fNuevoCedulonPagado</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmComisionesEscalonadas.pas">
+            <Form>frmComisiones</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmContratosEscalonados.pas">
+            <Form>frmContratos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMComisiones.pas">
+            <Form>fAbmComisionesEscalonadas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmGestionEmail.pas">
+            <Form>fGestionEmail</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\objEnviarEmails.pas"/>
+        <DCCReference Include="..\frm\frmConfiguracionMail.pas">
+            <Form>fConfiguracionMail</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmMailPropietarios.pas">
+            <Form>fMailAPropietarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\uGrillaClientDataSet.pas"/>
+        <DCCReference Include="..\frm\frmABMDatosFijos.pas">
+            <Form>fAbmDatosFijos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMConfiguracionMails.pas">
+            <Form>fAbmConfiguracionMails</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMRubrosDatosFijos.pas">
+            <Form>fAbmRubrosDatosFijos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMRazonesSociales.pas">
+            <Form>fAbmRazonesSociales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmAutomatizados.pas">
+            <Form>fAutomatizados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoIndicador.pas">
+            <Form>FNuevoIndicador</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmAbmBase.pas">
+            <Form>FABMBase</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMContratos.pas">
+            <Form>fAbmContratosEscalonados</Form>
+        </DCCReference>
+        <DCCReference Include="..\unit\uImpresion.pas"/>
+        <DCCReference Include="..\frm\frmABMSobres.pas">
+            <Form>fAbmSobres</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmUsuarios.pas">
+            <Form>FUsuarios</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoRubroIndicador.pas">
+            <Form>fNuevoRubroIndicador</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMRubrosIndicadores.pas">
+            <Form>fABMRubrosIndicadores</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevaCatetgoriaVale.pas">
+            <Form>fNuevaCategoriaVale</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmVales.pas">
+            <Form>FVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMCategoriasVales.pas">
+            <Form>fABMCategoriasVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRazonesSociales.pas">
+            <Form>FRazonesSociales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmActualizacionValores.pas">
+            <Form>FActualizacionValores</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmTablero.pas">
+            <Form>FTablero</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMCajas.pas">
+            <Form>fABMCajas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMIndicadores.pas">
+            <Form>fABMIndicadores</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevaCaja.pas">
+            <Form>fNuevaCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCubrirValesSaldoAlquiler.pas">
+            <Form>fCubrirValesSaldoAlquiler</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmAnomalias.pas">
+            <Form>fAnomalias</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmMovimientosCaja.pas">
+            <Form>fMovimientosCaja</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRecibosPendientes.pas">
+            <Form>fRecibosPendientes</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmModificacionRecuperoGastos.pas">
+            <Form>FModificacionGastosRecupero</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLimpiarHistoriaPropiedad.pas">
+            <Form>fLimpiarHistoriaPropiedad</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\recsinm.pas">
+            <Form>frecsinm</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmReciboDevolucion.pas">
+            <Form>FReciboDevolucion</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmMovimientosVale.pas">
+            <Form>fMovimientosVale</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRecuperarHistorico.pas">
+            <Form>FRecuperarHistorico</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmPasarHistorico.pas">
+            <Form>fPasarHistorico</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmValeDepositos.pas">
+            <Form>fValeDepositos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMVales.pas">
+            <Form>fABMVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRecuperarHistoricoVales.pas">
+            <Form>FRecuperarHistoricoVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmPasarHistoricoVales.pas">
+            <Form>FPasarHistoricoVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmRecibosHistoricos.pas">
+            <Form>fRecibosHistoricos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMMovimientos.pas">
+            <Form>fAbmMovimientos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmHistorialMovimientos.pas">
+            <Form>fHistorialMovimientos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCubrirVales.pas">
+            <Form>fCubrirVales</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmCubrirValesArreglos.pas">
+            <Form>fCubrirValesArreglos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoLiquidados.pas">
+            <Form>fListadoLiquidados</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmListadoUltimoLiquidados.pas">
+            <Form>fListadoUltimoLiquidados</Form>
+        </DCCReference>
+        <DCCReference Include="..\unit\voEHandler.pas"/>
+        <DCCReference Include="..\unit\Mapi.SendMail.pas"/>
+        <DCCReference Include="..\frm\frmNuevoCedulon.pas">
+            <Form>fAsignacionBoletas</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmDeudaImpuestos.pas">
+            <Form>fDeudaImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\ABMIdentificacionImpuestos.pas">
+            <Form>fABMIdentificacionImpuestos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmABMIndicesActualizacion.pas">
+            <Form>fAbmIndicesActualizacion</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmNuevoIndice.pas">
+            <Form>FNuevoIndice</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmBackupDatos.pas">
+            <Form>fBackupDatos</Form>
+        </DCCReference>
+        <DCCReference Include="..\frm\frmLecturaIA.pas">
+            <Form>fLecturaIA</Form>
+        </DCCReference>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">Inmosys.dpr</Source>
+                </Source>
+            </Delphi.Personality>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>
