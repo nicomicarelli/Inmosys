@@ -821,6 +821,7 @@ end;
 
 procedure TfAsignacionBoletas.btnRastrearClick(Sender: TObject);
 begin
+  // Logica de IA
   if ToInt(edCodigo.text) = 0 then
   begin
     MostrarDialogoAceptar('Debe seleccionar la empresa.');
