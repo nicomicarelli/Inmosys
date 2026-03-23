@@ -1,0 +1,46 @@
+object fProgreso: TfProgreso
+  Left = 0
+  Top = 0
+  Caption = 'Progreso'
+  ClientHeight = 70
+  ClientWidth = 451
+  Color = clSilver
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pbProgreso: TcxProgressBar
+    Left = 16
+    Top = 40
+    ParentFont = False
+    Properties.BarBevelOuter = cxbvLowered
+    Properties.BarStyle = cxbsAnimation
+    Properties.BeginColor = 54056
+    Properties.ShowOverload = True
+    Properties.ShowPeak = True
+    Style.BorderStyle = ebsOffice11
+    Style.Font.Charset = DEFAULT_CHARSET
+    Style.Font.Color = clWindowText
+    Style.Font.Height = -12
+    Style.Font.Name = 'Tahoma'
+    Style.Font.Style = [fsBold]
+    Style.IsFontAssigned = True
+    TabOrder = 0
+    Width = 417
+  end
+  object lbTarea: TcxLabel
+    Left = 16
+    Top = 11
+    Caption = 'Tarea:'
+    Properties.LabelEffect = cxleCool
+  end
+end
