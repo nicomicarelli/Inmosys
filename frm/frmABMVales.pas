@@ -26,7 +26,7 @@ uses
   ppDesignLayer, ppVar, ppBands, ppCtrls, ppStrtch, ppRegion, ppPrnabl, ppClass,
   ppCache, ppProd, ppReport, ppDB, ppComm, ppRelatv, ppDBJIT, cxSpinEdit,
   cxMaskEdit, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
-  Vcl.Menus, FxConnection, cxProgressBar, cxLabel;
+  Vcl.Menus, FxConnection, cxProgressBar, cxLabel, Vcl.ComCtrls, AdvProgr;
 
 type
   TProcesoThread = class(TThread)
@@ -137,7 +137,7 @@ type
     Columna_Recuperar: TcxGridDBColumn;
     chRecuperar: TcxCheckBox;
     lbTarea: TcxLabel;
-    Progreso: TcxProgressBar;
+    Progreso: TAdvProgress;
     procedure btnSalirClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -194,6 +194,7 @@ var
   fABMValesLocatarioSaliente: TfABMVales;
   fABMValesSaldoAlquiler: TfABMVales;
   FABMValesCajaFuerte: TFABMVales;
+  fABMValesSoloInformativos: TfABMVales;
 
 
 implementation
@@ -638,7 +639,7 @@ end;
 procedure TProcesoThread.ActualizarProgreso;
 begin
   fABMValesImpuestos.Progreso.Position := fABMValesImpuestos.Progreso.Position + 1;
-  if fABMValesImpuestos.Progreso.Position = fABMValesImpuestos.Progreso.Properties.Max then
+  if fABMValesImpuestos.Progreso.Position = fABMValesImpuestos.Progreso.Max then
   begin
     fABMValesImpuestos.Progreso.Visible := False;
     fABMValesImpuestos.lbTarea.Visible := False;
@@ -723,8 +724,6 @@ begin
     except
       on E: Exception do
       begin
-//        FTextoAMostrar := 'Error de DB: ' + E.Message;
-//        Synchronize(MostrarEnMemo);
         Exit; // Si no hay DB, no podemos seguir con la lógica de cruce
       end;
     end;
@@ -747,323 +746,6 @@ begin
     Except
       Conn.Rollback;
     end;
-//    case FEmpresa of
-//      1,3: prObtenerParametrosCodigoBarras;
-//      2: Synchronize(procedure begin
-//        FLecturaIA.gDetalle.Cells[2, 0] := 'U. Funcional';
-//       end);
-//    end;
-
-
-//    if FindFirst(FCarpeta + '*.pdf', faAnyFile, SR) = 0 then
-//    begin
-//      FTextoAMostrar := 'Procesando: por favor espere.';
-//      Synchronize(MostrarEnMemo);
-//      try
-//        repeat
-//          if Terminated then Break;
-//
-//          PathPDF := FCarpeta + SR.Name;
-//          NomBase := 'session_' + FormatDateTime('hhmmsszzz', Now);
-//          PathIMG := FPathApp + NomBase + '.png';
-//          PathTXT := FPathApp + NomBase;
-//
-//         // 1. Generar Imagen
-//  //        if fLecturaIA.EjecutarInvisible(FPathApp + 'pdftocairo.exe',
-//  //           '-png -singlefile -r 800 "' + PathPDF + '" "' + FPathApp + NomBase + '"') then
-//          begin
-//            Sleep(300);
-//
-//            FEnteDetectado := fLecturaIA.ClasificarDocumento(PathPDF);
-//            FTextoAMostrar := FEnteDetectado;
-//            FColumna := 1;
-//            Synchronize(MostrarEnGrilla);
-//            if FEnteDetectado = 'AGUAS' then
-//            begin
-//              if FEmpresa <> 2 then
-//              begin
-//                FTextoAMostrar := 'CEDULON INCORRECTO';
-//                FColumna := 2;
-//                Synchronize(MostrarEnGrilla);
-//                Synchronize(ActualizarProgreso);
-//                Continue;
-//              end;
-//
-//              UnidadFact := fLecturaIA.ObtenerUnidadConPDFToText(PathPdf);
-//              FTextoAMostrar := UnidadFact;
-//              FColumna := 2;
-//              Synchronize(MostrarEnGrilla);
-//
-//              Query.Close;
-//              Query.SQL.Text := 'SELECT CODINQ FROM INMUEBLES WHERE UNIDADFUNCIONAL = :unidad';
-//              Query.ParamByName('unidad').AsString := UnidadFact;
-//              Query.Open;
-//
-//              if not Query.IsEmpty then
-//              begin
-//                FTextoAMostrar := Query.FieldByName('Codinq').AsString;
-//                FColumna := 0;
-//                Synchronize(MostrarEnGrilla);
-//                FTextoAMostrar := 'ENCONTRADO';
-//                FColumna := 5;
-//                Synchronize(MostrarEnGrilla);
-//              end
-//              else
-//              begin
-//                FTextoAMostrar := '';
-//                FColumna := 0;
-//                Synchronize(MostrarEnGrilla);
-//                FTextoAMostrar := 'NO ENCONTRADO';
-//                FColumna := 5;
-//                Synchronize(MostrarEnGrilla);
-//              end;
-//
-//              CodigosBarras := fLecturaIA.ExtraerCodigosBarrasFiel(PathPDF);
-//              try
-//                if CodigosBarras.Count > 0 then
-//                begin
-//                  for i := 0 to CodigosBarras.Count - 1 do
-//                  begin
-//                    FTextoAMostrar := CodigosBarras[i];
-//                    FColumna := 3;
-//                    Synchronize(MostrarEnGrilla);
-//                    TThread.Synchronize(nil,
-//                      procedure
-//                      var J: Integer;
-//                      begin
-//                        for J := 1 to FAsignacionBoletas.gDetalle.RowCount -1 do
-//                        begin
-//                          if FAsignacionBoletas.gDetalle.Cells[0, J] = Query.FieldByName('Codinq').AsString then
-//                          begin
-//                            FAsignacionBoletas.gDetalle.Cells[2, J] := CodigosBarras[0];
-//                            FAsignacionBoletas.gDetalle.Col := 2;
-//                            FAsignacionBoletas.gDetalle.Row := j;
-//                            FAsignacionBoletas.gDetalleKeyPress(nil, Key);
-//                            FTextoAMostrar := 'ACTUALIZO';
-//                            FColumna := 5;
-//                            Synchronize(MostrarEnGrilla);
-//
-//                          end
-//                        end;
-//                      end);
-//                  end;
-//                end
-//                else
-//                begin
-//                  // 2. SI FALLA EL MÉTODO FIEL, RECURRIMOS AL OCR (Tu proceso actual)
-//                  FTextoAMostrar := 'Aviso: No se halló texto digital, usando OCR para barras...';
-//                  Synchronize(MostrarEnMemo);
-//
-//                  // Aquí ejecutas tu pdftocairo + tesseract actual
-//                end;
-//              finally
-//                CodigosBarras.Free;
-//                Inc(FFila);
-//                Synchronize(AgregarFila);
-//              end;
-//            end;
-//
-//            if FEnteDetectado = 'MUNICIPALIDAD' then
-//            begin
-//              try
-//                if FEmpresa <> 3 then
-//                begin
-//                  FTextoAMostrar := 'CEDULON INCORRECTO';
-//                  FColumna := 2;
-//                  Synchronize(MostrarEnGrilla);
-//                  Synchronize(ActualizarProgreso);
-//                  Continue;
-//                end;
-//
-//                FCodigoBarras1 := '';
-//                FCodigoBarras2 := '';
-//
-//                UnidadFact := fLecturaIA.ExtraerNomenclaturaMuniFiel(PathPdf);
-//                FTextoAMostrar := UnidadFact;
-//                FColumna := 2;
-//                Synchronize(MostrarEnGrilla);
-//
-//                Query.Close;
-//                Query.SQL.Text := 'SELECT CODINQ FROM INMUEBLES WHERE NOMENCLATURACATASTRAL = :unidad';
-//                Query.ParamByName('unidad').AsString := UnidadFact;
-//                Query.Open;
-//
-//                if not Query.IsEmpty then
-//                begin
-//                  FTextoAMostrar := Query.FieldByName('Codinq').AsString;
-//                  FColumna := 0;
-//                  Synchronize(MostrarEnGrilla);
-//                  FTextoAMostrar := 'ENCONTRADO';
-//                  FColumna := 5;
-//                  Synchronize(MostrarEnGrilla);
-//                end
-//                else
-//                begin
-//                  FTextoAMostrar := '';
-//                  FColumna := 0;
-//                  Synchronize(MostrarEnGrilla);
-//                  FTextoAMostrar := 'NO ENCONTRADO';
-//                  FColumna := 5;
-//                  Synchronize(MostrarEnGrilla);
-//                end;
-//
-//                fLecturaIA.ExtraerBarrasMunicipales(PathPDF, vBarraLarga, vBarraInterna);
-//
-//                if vBarraLarga <> '' then
-//                begin
-//                  FTextoAMostrar := vBarraLarga;
-//                  FColumna := 3;
-//                  Synchronize(MostrarEnGrilla);
-//                end;
-//
-//                if vBarraInterna <> '' then
-//                begin
-//                  FTextoAMostrar := vBarraInterna;
-//                  FColumna := 4;
-//                  Synchronize(MostrarEnGrilla);
-//                end;
-//
-//                if (Trim(vBarraLarga) <> '') and (Trim(vBarraInterna) <> '') then
-//                begin
-//                  FCodigoBarras1 := vBarraLarga;
-//                  FCodigoBarras2 := vBarraInterna;
-//                  try
-//                    TThread.Synchronize(nil,
-//                      procedure
-//                      var J: Integer;
-//                      begin
-//                        for J := 1 to FAsignacionBoletas.gDetalle.RowCount -1 do
-//                        begin
-//                          if FAsignacionBoletas.gDetalle.Cells[0, J] = Query.FieldByName('Codinq').AsString then
-//                          begin
-//                            prTraducirCodigoBarras(J);
-//                            FTextoAMostrar := 'ACTUALIZO';
-//                            FColumna := 5;
-//                            Synchronize(MostrarEnGrilla);
-//                            Break;
-//                          end
-//                        end;
-//                      end);
-//                  finally
-//                    CodigosBarras.Free;
-//                  end;
-//                end;
-//              finally
-//                Inc(FFila);
-//                Synchronize(AgregarFila);
-//              end;
-//            end;
-//
-//            if FEnteDetectado = 'RENTAS' then
-//            begin
-//              if FEmpresa <> 1 then
-//              begin
-//                FTextoAMostrar := 'CEDULON INCORRECTO';
-//                FColumna := 2;
-//                Synchronize(MostrarEnGrilla);
-//                Synchronize(ActualizarProgreso);
-//                Continue;
-//              end;
-//
-//              UnidadFact := fLecturaIA.ExtraerCuentaRentas(PathPdf);
-//              FTextoAMostrar := UnidadFact;
-//              FColumna := 2;
-//              Synchronize(MostrarEnGrilla);
-//
-//  //            fLecturaIA.VerificarZBarListo;
-//  //
-//  //            fLecturaIA.ExtraerBarrasRapido(PathPdf, vBarraLarga, vBarraInterna);
-//  //            FTextoAMostrar := 'Codigo 1: ' + vBarraLarga;
-//  //            Synchronize(MostrarEnMemo);
-//  //            FTextoAMostrar := 'Codigo 2: ' + vBarraInterna;
-//  //
-//  //            fLecturaIA.VerificarZBarListo;
-//
-//              if fLecturaIA.EjecutarInvisible(FPathApp + 'pdftocairo.exe',
-//                 '-png -singlefile -r 800 "' + PathPDF + '" "' + FPathApp + NomBase + '"') then
-//              begin
-//                Sleep(300);
-//
-//                fLecturaIA.EjecutarInvisible(FPathApp + 'tesseract.exe',
-//                   '"' + PathIMG + '" "' + PathTXT + '" --psm 6 --oem 3 --tessdata-dir "' + FPathApp + 'tessdata" -c tessedit_char_whitelist=0123456789');
-//                Query.Close;
-//                Query.SQL.Text := 'SELECT CODINQ FROM INMUEBLES WHERE NUMEROCUENTA = :unidad';
-//                Query.ParamByName('unidad').AsString := UnidadFact;
-//                Query.Open;
-//
-//                if not Query.IsEmpty then
-//                begin
-//                  FTextoAMostrar := Query.FieldByName('Codinq').AsString;
-//                  FColumna := 0;
-//                  Synchronize(MostrarEnGrilla);
-//                  FTextoAMostrar := 'ENCONTRADO';
-//                  FColumna := 5;
-//                  Synchronize(MostrarEnGrilla);
-//                end
-//                else
-//                begin
-//                  FTextoAMostrar := '';
-//                  FColumna := 0;
-//                  Synchronize(MostrarEnGrilla);
-//                  FTextoAMostrar := 'NO ENCONTRADO';
-//                  FColumna := 5;
-//                  Synchronize(MostrarEnGrilla);
-//                end;
-//
-//                FCodigoBarras1 := '';
-//                FCodigoBarras2 := '';
-//                // Procesar y limpiar (dentro de ProcesarSoloNumeros se debe usar Synchronize si escribe al memo)
-//                ProcesarSoloNumeros(PathTXT + '.txt', FEnteDetectado);
-//                FColumna := 3;
-//                FTextoAMostrar := FCodigoBarras1;
-//                Synchronize(MostrarEnGrilla);
-//                FColumna := 4;
-//                FTextoAMostrar := FCodigoBarras2;
-//                Synchronize(MostrarEnGrilla);
-//
-//                if (Trim(FCodigoBarras1) <> '') and (Trim(FCodigoBarras2) <> '') then
-//                begin
-//                  try
-//                    TThread.Synchronize(nil,
-//                      procedure
-//                      var J: Integer;
-//                      begin
-//                        for J := 1 to FAsignacionBoletas.gDetalle.RowCount -1 do
-//                        begin
-//                          if FAsignacionBoletas.gDetalle.Cells[0, J] = Query.FieldByName('Codinq').AsString then
-//                          begin
-//                            prTraducirCodigoBarras(J);
-//                            FTextoAMostrar := 'ACTUALIZO';
-//                            FColumna := 5;
-//                            Synchronize(MostrarEnGrilla);
-//                            Break;
-//                          end
-//                        end;
-//                      end);
-//                  finally
-//                    CodigosBarras.Free;
-//                  end;
-//                end;
-//                Inc(FFila);
-//                Synchronize(AgregarFila);
-//              end;
-//            end;
-//          end;
-//
-//          if FileExists(PathIMG) then DeleteFile(PChar(PathIMG));
-//          if FileExists(PathTXT + '.txt') then DeleteFile(PChar(PathTXT + '.txt'));
-//          Synchronize(ActualizarProgreso);
-//        until FindNext(SR) <> 0;
-//      finally
-//        FindClose(SR);
-//      end;
-//    end;
-
-//    FTextoAMostrar := '--- PROCESO DE CARPETA FINALIZADO ---';
-//    Synchronize(MostrarEnMemo);
-
-    // Reactivar botón al finalizar
-//    TThread.Synchronize(nil, procedure begin fLecturaIA.btnProcesarCedulon.Enabled := True; end);
   finally
     Query.Free;
     SP.Free;
@@ -1090,8 +772,8 @@ end;
 
 procedure TProcesoThread.PrepararProgreso;
 begin
-  fABMValesImpuestos.Progreso.Properties.Min := 0;
-  fABMValesImpuestos.Progreso.Properties.Max := FMaximo;
+  fABMValesImpuestos.Progreso.Min := 0;
+  fABMValesImpuestos.Progreso.Max := FMaximo;
   fABMValesImpuestos.Progreso.Position := 0;
   fABMValesImpuestos.Progreso.Visible := True;
   fABMValesImpuestos.lbTarea.Visible := True;

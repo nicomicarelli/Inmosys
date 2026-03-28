@@ -207,6 +207,7 @@ type
     actVerBackups: TAction;
     actLecturaIA: TAction;
     actListadoDeuda: TAction;
+    actSoloInformativos: TAction;
     procedure botonsalirClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure actSalirExecute(Sender: TObject);
@@ -344,6 +345,7 @@ type
     procedure actVerBackupsExecute(Sender: TObject);
     procedure actLecturaIAExecute(Sender: TObject);
     procedure actListadoDeudaExecute(Sender: TObject);
+    procedure actSoloInformativosExecute(Sender: TObject);
   private
   public
     fUsuario: String;
@@ -535,6 +537,17 @@ begin
     Application.CreateForm(TFABMSobres, FABMSobres)
   else
     FABMSobres.Show;
+end;
+
+procedure TfPrincipal.actSoloInformativosExecute(Sender: TObject);
+begin
+  if fABMValesSoloInformativos = nil then
+    Application.CreateForm(TFABMVales, fABMValesSoloInformativos)
+  else
+    fABMValesSoloInformativos.Show;
+  fABMValesSoloInformativos.Categoria := 19;
+  fABMValesSoloInformativos.cbCategoria.EditValue := 19;
+  fABMValesSoloInformativos.cbCategoria.Enabled := False;
 end;
 
 procedure TfPrincipal.actTableroExecute(Sender: TObject);
@@ -2188,7 +2201,6 @@ begin
   FABMValesOtros.Categoria := 1;
   FABMValesOtros.cbCategoria.EditValue := 1;
   FABMValesOtros.cbCategoria.Enabled := False;
-
 end;
 
 procedure TfPrincipal.actPagadosNoCobradosExecute(Sender: TObject);

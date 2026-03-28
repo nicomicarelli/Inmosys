@@ -77,7 +77,7 @@ object fABMVales: TfABMVales
       Style.BorderStyle = ebsNone
       TabOrder = 0
       Transparent = True
-      ExplicitTop = 368
+      ExplicitTop = 373
       Height = 64
       Width = 1002
       object btnSalir: TAdvGlowButton
@@ -376,25 +376,17 @@ object fABMVales: TfABMVales
         Properties.LabelEffect = cxleCool
         Visible = False
       end
-      object Progreso: TcxProgressBar
+      object Progreso: TAdvProgress
         Left = 190
-        Top = 4
-        ParentFont = False
-        Properties.BarBevelOuter = cxbvLowered
-        Properties.BarStyle = cxbsAnimation
-        Properties.BeginColor = 54056
-        Properties.ShowOverload = True
-        Properties.ShowPeak = True
-        Style.BorderStyle = ebsOffice11
-        Style.Font.Charset = DEFAULT_CHARSET
-        Style.Font.Color = clWindowText
-        Style.Font.Height = -12
-        Style.Font.Name = 'Tahoma'
-        Style.Font.Style = [fsBold]
-        Style.IsFontAssigned = True
-        TabOrder = 6
-        Visible = False
+        Top = 6
         Width = 809
+        Height = 17
+        Smooth = True
+        BarColor = clNavy
+        BackgroundColor = clBtnFace
+        TabOrder = 6
+        BkColor = clBtnFace
+        Version = '1.2.0.0'
       end
     end
     object cxGroupBox2: TcxGroupBox
@@ -791,7 +783,6 @@ object fABMVales: TfABMVales
       Height = 271
       Align = alClient
       TabOrder = 2
-      ExplicitHeight = 281
       object gDatos: TcxGridDBTableView
         PopupMenu = popEliminar
         Navigator.Buttons.CustomButtons = <>
