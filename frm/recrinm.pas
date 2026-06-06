@@ -60,6 +60,67 @@ type
     ppDesignLayers2: TppDesignLayers;
     ppDesignLayer2: TppDesignLayer;
     ppParameterList2: TppParameterList;
+    plDatosppField8: TppField;
+    ReporteFijo: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppShape5: TppShape;
+    ppLabel29: TppLabel;
+    ppLabel30: TppLabel;
+    ppLabel31: TppLabel;
+    ppDBText8: TppDBText;
+    ppLabel32: TppLabel;
+    ppLabel33: TppLabel;
+    ppLabel34: TppLabel;
+    ppLabel35: TppLabel;
+    ppLabel36: TppLabel;
+    ppLabel37: TppLabel;
+    ppLabel38: TppLabel;
+    ppLabel39: TppLabel;
+    ppShape6: TppShape;
+    ppVariable7: TppVariable;
+    ppLabel40: TppLabel;
+    ppLabel41: TppLabel;
+    ppVariable8: TppVariable;
+    ppImage5: TppImage;
+    ppHeaderBand5: TppHeaderBand;
+    ppImage6: TppImage;
+    ppVariable9: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand2: TppSummaryBand;
+    raCodeModule2: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList5: TppParameterList;
+    ReporteFijoDuplicado: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel3: TppLabel;
+    ppLabel4: TppLabel;
+    ppLabel5: TppLabel;
+    ppDBText6: TppDBText;
+    ppLabel6: TppLabel;
+    ppLabel7: TppLabel;
+    ppLabel8: TppLabel;
+    ppLabel9: TppLabel;
+    ppLabel10: TppLabel;
+    ppLabel11: TppLabel;
+    ppLabel12: TppLabel;
+    ppLabel13: TppLabel;
+    ppShape2: TppShape;
+    ppVariable1: TppVariable;
+    ppLabel14: TppLabel;
+    ppLabel15: TppLabel;
+    ppVariable2: TppVariable;
+    ppImage1: TppImage;
+    ppHeaderBand3: TppHeaderBand;
+    ppImage2: TppImage;
+    ppVariable3: TppVariable;
+    ppDetailBand3: TppDetailBand;
+    ppSummaryBand1: TppSummaryBand;
+    raCodeModule1: TraCodeModule;
+    ppDesignLayers3: TppDesignLayers;
+    ppDesignLayer3: TppDesignLayer;
+    ppParameterList3: TppParameterList;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4KeyPress(Sender: TObject; var Key: Char);
@@ -106,6 +167,8 @@ var
   Importe: string;
   Texto: string;
   Monto: Currency;
+  q: TFXQuery;
+  Numero: String;
 begin
   Fecha := edit2.Text;
   Fecha := transformarfecha(Fecha);
@@ -127,16 +190,17 @@ begin
            '–previa deducción de los gastos por pedidos de informes, tasas, etc.- adquirirá el carácter de “seña” '+
            'en los términos de los arts. 1059 y 1060 del Código Civil y su saldo será considerado como parte del precio '+
            'de la locación que eventualmente se fije en el supuesto de celebrarse el contrato locativo. ';
-//
-//
-//
-//  Texto := 'RECIBI, de/la Sr./a ' + edit3.Text + ' DNI Nº ' + Edit6.text + ' la suma de Pesos '+
-//  ImporteEnLetras(Importe) + ' ($ ' + Edit4.Text + ') en concepto de reserva de locación por el término '+
-//  'de setenta y dos (72 hs., con relación al inmueble sito en calle ' + Combobox1.text + ' de esta ciudad de Córdoba. '+
-//  'La presente reserva no implica principio de ejecución del contrato locativo. Si por cualquier circunstancia la '+
-//  'eventual locación no se concretara, se procedera a la devolución de la reserva previa deducción de los gastos (pedidos '+
-//  'de informes, tasas, etc.), poniendo a disposición del interesado el saldo de la misma por un plazo de cuarenta y ocho (48) hs., '+
-//  'y vencido este último, se considera perdida la reserva. CONSTE.- ';
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
+
 
   gImpresion.Vaciar;
   gImpresion.Cells[0,1] := edit1.Text;
@@ -151,27 +215,10 @@ begin
   gImpresion.Cells[9,1] := ImporteEnLetras(Monto);
   gImpresion.Cells[10,1] := edtCodigo.Text;
   gImpresion.Cells[13,1] := Texto;
-  ImprimirReporte(Reporte, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
-  ImprimirReporte(ReporteDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
+  gImpresion.Cells[14,1] := Numero;
 
-(*  Fecha := edit2.Text;
-  Fecha := transformarfecha(Fecha);
-  Fecha := 'Córdoba, ' + Fecha;
-  Importe := edit4.Text;
-  gImpresion.Vaciar;
-  gImpresion.Cells[0,1] := edit1.Text;
-  gImpresion.Cells[1,1] := edit3.Text;
-  gImpresion.Cells[2,1] := Fecha;
-  gImpresion.Cells[3,1] := cbxDatofijo.text;
-  gImpresion.Cells[4,1] := edtCodigo.Text;
-  gImpresion.Cells[5,1] := cbxDatofijo.text;
-  gImpresion.Cells[6,1] := 'RESERVA :' + Combobox1.text;
-  gImpresion.Cells[7,1] := edit4.Text;
-  gImpresion.Cells[8,1] := '$ ' + edit4.Text;
-  gImpresion.Cells[9,1] := ImporteEnLetras(Importe);
-  gImpresion.Cells[10,1] := edtCodigo.Text;
-  gImpresion.Cells[13,1] := Texto;
-*)
+  ImprimirReporte(ReporteFijo, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
+  ImprimirReporte(ReporteFijoDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
 
   if fConfirmacionRecibos = nil then
     Application.CreateForm(TFConfirmacionRecibos, FConfirmacionRecibos)
@@ -336,6 +383,7 @@ var
   I:         Integer;
   J:         Integer;
   Monto: Currency;
+  q: TFXquery;
 begin
   Fecha     := Edit2.Text;
   Fecha     := 'Córdoba, ' + FechaEnLetras(Fecha);
@@ -363,6 +411,9 @@ begin
     Result := Combobox1.Text;
   if aFieldName = 'Texto' then
     Result := gImpresion.Cells[13,1];
+  if aFieldName = 'Numero' then
+    Result := gImpresion.Cells[14,1];
+
 end;
 
 procedure Tfrecrinm.Edit5KeyPress(Sender: TObject; var Key: Char);

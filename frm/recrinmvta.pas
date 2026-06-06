@@ -7,7 +7,7 @@ uses
   StdCtrls, ExtCtrls, Buttons, DBTables, Db, ImgList,
   ComCtrls, ToolWin, ppDB, ppDBJIT, ppParameter, ppBands, ppCtrls, ppPrnabl,
   ppClass, ppCache, ppComm, ppRelatv, ppProd, ppReport, sqlExpr, ppDesignLayer,
-  FXQuery, AdvGlowButton;
+  FXQuery, AdvGlowButton, ppModule, raCodMod, dxGDIPlusClasses, ppVar;
 
 type
   Tfrecrinmvta = class(TForm)
@@ -95,6 +95,66 @@ type
     Edit5: TEdit;
     Edit4: TEdit;
     Edit2: TEdit;
+    ReporteFijoDuplicado: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel31: TppLabel;
+    ppLabel32: TppLabel;
+    ppLabel33: TppLabel;
+    ppDBText17: TppDBText;
+    ppLabel34: TppLabel;
+    ppLabel35: TppLabel;
+    ppLabel36: TppLabel;
+    ppLabel37: TppLabel;
+    ppLabel38: TppLabel;
+    ppLabel39: TppLabel;
+    ppLabel40: TppLabel;
+    ppLabel41: TppLabel;
+    ppShape2: TppShape;
+    ppVariable1: TppVariable;
+    ppLabel42: TppLabel;
+    ppLabel43: TppLabel;
+    ppVariable2: TppVariable;
+    ppImage1: TppImage;
+    ppHeaderBand3: TppHeaderBand;
+    ppImage2: TppImage;
+    ppVariable3: TppVariable;
+    ppDetailBand3: TppDetailBand;
+    ppSummaryBand1: TppSummaryBand;
+    raCodeModule1: TraCodeModule;
+    ppDesignLayers3: TppDesignLayers;
+    ppDesignLayer3: TppDesignLayer;
+    ppParameterList3: TppParameterList;
+    ReporteFijo: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppShape3: TppShape;
+    ppLabel44: TppLabel;
+    ppLabel45: TppLabel;
+    ppLabel46: TppLabel;
+    ppDBText18: TppDBText;
+    ppLabel47: TppLabel;
+    ppLabel48: TppLabel;
+    ppLabel49: TppLabel;
+    ppLabel50: TppLabel;
+    ppLabel51: TppLabel;
+    ppLabel52: TppLabel;
+    ppLabel53: TppLabel;
+    ppLabel54: TppLabel;
+    ppShape4: TppShape;
+    ppVariable4: TppVariable;
+    ppLabel55: TppLabel;
+    ppLabel56: TppLabel;
+    ppVariable5: TppVariable;
+    ppImage3: TppImage;
+    ppHeaderBand4: TppHeaderBand;
+    ppImage4: TppImage;
+    ppVariable6: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand2: TppSummaryBand;
+    raCodeModule2: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList4: TppParameterList;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4KeyPress(Sender: TObject; var Key: Char);
@@ -219,6 +279,8 @@ var
   I:           Integer;
   J:           Integer;
   Monto:       Currency;
+  Numero:      Integer;
+  q     :      TFXQuery;
 begin
   Inquilino := Edit3.Text;
   Ubicacion := Combobox1.Text;
@@ -254,6 +316,16 @@ begin
     Result := Ubicacion;
   if afieldName='Escribania' then
     Result := Escribania;
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Result := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
+
 end;
 
 
