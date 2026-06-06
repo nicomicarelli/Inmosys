@@ -501,16 +501,9 @@ begin
                 Query.ParamByName('unidad').AsString := UnidadFact;
                 Query.Open;
 
-                if not Query.IsEmpty then
-                begin
-                  FTextoAMostrar := Query.FieldByName('Codinq').AsString;
-                  FColumna := 0;
-                  Synchronize(MostrarEnGrilla);
-                  FTextoAMostrar := 'ENCONTRADO';
-                  FColumna := 5;
-                  Synchronize(MostrarEnGrilla);
-                end
-                else
+                fLecturaIA.ExtraerBarrasMunicipales(PathPDF, vBarraLarga, vBarraInterna);
+
+                if Query.IsEmpty then
                 begin
                   FTextoAMostrar := '';
                   FColumna := 0;
@@ -518,52 +511,71 @@ begin
                   FTextoAMostrar := 'NO ENCONTRADO';
                   FColumna := 5;
                   Synchronize(MostrarEnGrilla);
+                  Continue;
                 end;
 
-                fLecturaIA.ExtraerBarrasMunicipales(PathPDF, vBarraLarga, vBarraInterna);
-
-                if vBarraLarga <> '' then
+                while not Query.eof do
                 begin
-                  FTextoAMostrar := vBarraLarga;
-                  FColumna := 3;
+                  FTextoAMostrar := Query.FieldByName('Codinq').AsString;
+                  FColumna := 0;
                   Synchronize(MostrarEnGrilla);
-                end;
-
-                if vBarraInterna <> '' then
-                begin
-                  FTextoAMostrar := vBarraInterna;
-                  FColumna := 4;
+                  FTextoAMostrar := FEnteDetectado;
+                  FColumna := 1;
                   Synchronize(MostrarEnGrilla);
-                end;
+                  FTextoAMostrar := UnidadFact;
+                  FColumna := 2;
+                  Synchronize(MostrarEnGrilla);
 
-                if (Trim(vBarraLarga) <> '') and (Trim(vBarraInterna) <> '') then
-                begin
-                  FCodigoBarras1 := vBarraLarga;
-                  FCodigoBarras2 := vBarraInterna;
-                  try
-                    TThread.Synchronize(nil,
-                      procedure
-                      var J: Integer;
-                      begin
-                        for J := 1 to FAsignacionBoletas.gDetalle.RowCount -1 do
-                        begin
-                          if FAsignacionBoletas.gDetalle.Cells[0, J] = Query.FieldByName('Codinq').AsString then
-                          begin
-                            prTraducirCodigoBarras(J);
-                            FTextoAMostrar := 'ACTUALIZO';
-                            FColumna := 5;
-                            Synchronize(MostrarEnGrilla);
-                            Break;
-                          end
-                        end;
-                      end);
-                  finally
-                    CodigosBarras.Free;
+                  FTextoAMostrar := 'ENCONTRADO';
+                  FColumna := 5;
+                  Synchronize(MostrarEnGrilla);
+
+                  if vBarraLarga <> '' then
+                  begin
+                    FTextoAMostrar := vBarraLarga;
+                    FColumna := 3;
+                    Synchronize(MostrarEnGrilla);
                   end;
+
+                  if vBarraInterna <> '' then
+                  begin
+                    FTextoAMostrar := vBarraInterna;
+                    FColumna := 4;
+                    Synchronize(MostrarEnGrilla);
+                  end;
+
+                  if (Trim(vBarraLarga) <> '') and (Trim(vBarraInterna) <> '') then
+                  begin
+                    FCodigoBarras1 := vBarraLarga;
+                    FCodigoBarras2 := vBarraInterna;
+                    try
+                      TThread.Synchronize(nil,
+                        procedure
+                        var J: Integer;
+                        begin
+                            for J := 1 to FAsignacionBoletas.gDetalle.RowCount -1 do
+                            begin
+                              if FAsignacionBoletas.gDetalle.Cells[0, J] = Query.FieldByName('Codinq').AsString then
+                              begin
+                                prTraducirCodigoBarras(J);
+                                FTextoAMostrar := 'ACTUALIZO';
+                                FColumna := 5;
+                                Synchronize(MostrarEnGrilla);
+                                Inc(FFila);
+                                Synchronize(AgregarFila);
+                                Break;
+                              end
+                            end;
+                          end);
+                      finally
+                        CodigosBarras.Free;
+                      end;
+                      query.Next;
+                     end;
                 end;
               finally
-                Inc(FFila);
-                Synchronize(AgregarFila);
+//                Inc(FFila);
+//                Synchronize(AgregarFila);
               end;
             end;
 
@@ -1377,19 +1389,14 @@ begin
         for i := 0 to Lineas.Count - 1 do
         begin
           LineaActual := UpperCase(Lineas[i]);
-
-          // 1. Buscamos la etiqueta "NC:"
-          if Pos('LINK:', LineaActual) > 0 then
+          LineaActual := AnsiReplaceStr(LineaActual, ' ','');
+          if ((Pos('NC', LineaActual) > 0) OR
+              (Pos('IDENTIFICADOR', LineaActual) > 0) OR
+              (Pos('LINK', LineaActual) > 0) OR
+              (Pos('ELECTRONICO', LineaActual) > 0) OR
+              (Pos('INMUEBLE', LineaActual) > 0)) then
           begin
-            // 2. Intentamos extraer de la misma línea (después de 'NC:')
-            Fragmento := Copy(LineaActual, Pos('LINK:', LineaActual) + 5, Length(LineaActual)-1);
-            SoloNum := LimpiarSoloNumeros(Fragmento);
-
-            // 3. Si no hay 15 dígitos, buscamos en la línea de abajo (Caso Boleta 10)
-            if (Length(SoloNum) < 15) and (i + 1 < Lineas.Count) then
-              SoloNum := LimpiarSoloNumeros(Lineas[i + 1]);
-
-            // 4. Si encontramos los 15 dígitos, devolvemos el código
+            SoloNum := LimpiarSoloNumeros(LineaActual);
             if Length(SoloNum) >= 15 then
             begin
               Result := Copy(SoloNum, 1, 15);
@@ -1397,6 +1404,49 @@ begin
               Exit;
             end;
           end;
+
+
+
+          // 1. Buscamos la etiqueta "NC:"
+//          if Pos('NC:', LineaActual) > 0 then
+//          begin
+//            // 2. Intentamos extraer de la misma línea (después de 'NC:')
+////            Fragmento := Copy(LineaActual, Pos('LINK:', LineaActual) + 5, Length(LineaActual)-1);
+//            Fragmento := Copy(LineaActual, Pos('NC:', LineaActual) + 3, Length(LineaActual)-1);
+//            SoloNum := LimpiarSoloNumeros(Fragmento);
+//
+//            // 3. Si no hay 15 dígitos, buscamos en la línea de abajo (Caso Boleta 10)
+//            if (Length(SoloNum) < 15) and (i + 1 < Lineas.Count) then
+//              SoloNum := LimpiarSoloNumeros(Lineas[i + 1]);
+//
+//            // 4. Si encontramos los 15 dígitos, devolvemos el código
+//            if Length(SoloNum) >= 15 then
+//            begin
+//              Result := Copy(SoloNum, 1, 15);
+//              // Opcional: Result := FormatearNC(Copy(SoloNum, 1, 15));
+//              Exit;
+//            end;
+//          end;
+//
+//          if Pos('IDENTIFICADOR: ', AnsiUppercase(LineaActual)) > 0 then
+//          begin
+//            // 2. Intentamos extraer de la misma línea (después de 'NC:')
+////            Fragmento := Copy(LineaActual, Pos('LINK:', LineaActual) + 5, Length(LineaActual)-1);
+//            Fragmento := Copy(LineaActual, Pos('IDENTIFICADOR: ', AnsiUppercase(LineaActual)) + 15, Length(LineaActual)-1);
+//            SoloNum := LimpiarSoloNumeros(Fragmento);
+//
+//            // 3. Si no hay 15 dígitos, buscamos en la línea de abajo (Caso Boleta 10)
+//            if (Length(SoloNum) < 15) and (i + 1 < Lineas.Count) then
+//              SoloNum := LimpiarSoloNumeros(Lineas[i + 1]);
+//
+//            // 4. Si encontramos los 15 dígitos, devolvemos el código
+//            if Length(SoloNum) >= 15 then
+//            begin
+//              Result := Copy(SoloNum, 1, 15);
+//              // Opcional: Result := FormatearNC(Copy(SoloNum, 1, 15));
+//              Exit;
+//            end;
+//          end;
         end;
       finally
         Lineas.Free;
@@ -1464,17 +1514,25 @@ begin
             Continue;
 
           // 1. Identificar la Barra de Cobro (42 dígitos, empieza con 32)
-          if (Length(SoloNum) >= 42) and (Copy(SoloNum, 1, 2) = '32') then
+          if (Length(SoloNum) = 30) and (Copy(SoloNum, 1, 2) = '32') then
+          begin
+            Barra32 := Copy(SoloNum, 1, 30);
+            Barra99 := Copy(SoloNum, 31, 12);
+          end
+          else if (Length(SoloNum) >= 42) and (Copy(SoloNum, 1, 2) = '32') then
           begin
             Barra32 := Copy(SoloNum, 1, 30);
             Barra99 := Copy(SoloNum, 31, 12);
           end;
 
-          // 2. Identificar la Barra Interna (Aprox 18 dígitos, empieza con 99)
-          if (Length(SoloNum) >= 15) and (Length(SoloNum) < 30) and (Copy(SoloNum, 1, 2) = '99') then
-          begin
-            Barra99 := SoloNum;
-          end;
+          if (Length(SoloNum) = 12) and ((Copy(SoloNum, 1, 2) = '99') or (Copy(SoloNum, 1, 2) = '98')) then
+            Barra99 := Copy(SoloNum, 1, 12);
+
+//          // 2. Identificar la Barra Interna (Aprox 18 dígitos, empieza con 99)
+//          if (Length(SoloNum) >= 15) and (Length(SoloNum) < 30) and (Copy(SoloNum, 1, 2) = '99') then
+//          begin
+//            Barra99 := SoloNum;
+//          end;
 
           // Si ya encontramos ambos, salimos del bucle
           if (Barra32 <> '') and (Barra99 <> '') then Break;
