@@ -65,7 +65,7 @@ object fPrincipal: TfPrincipal
         Caption = 'Tablero de Control'
         Page = rbpTablero
       end>
-    TabIndex = 4
+    TabIndex = 2
     DesignSize = (
       1600
       143)
@@ -183,41 +183,6 @@ object fPrincipal: TfPrincipal
         GroupIndex = 3
       end
     end
-    object rbpCuentasCorrientes: TRibbonPage
-      Left = 0
-      Top = 50
-      Width = 1599
-      Height = 93
-      Caption = 'Cuentas Corrientes'
-      Index = 2
-      object RibbonGroup11: TRibbonGroup
-        Left = 4
-        Top = 3
-        Width = 130
-        Height = 86
-        ActionManager = acmMenuPrincipal
-        Caption = 'Cuentas Corrientes'
-        GroupIndex = 0
-      end
-      object RibbonGroup12: TRibbonGroup
-        Left = 136
-        Top = 3
-        Width = 545
-        Height = 86
-        ActionManager = acmMenuPrincipal
-        Caption = 'Listados'
-        GroupIndex = 1
-      end
-      object RibbonGroup13: TRibbonGroup
-        Left = 683
-        Top = 3
-        Width = 197
-        Height = 86
-        ActionManager = acmMenuPrincipal
-        Caption = 'Historial'
-        GroupIndex = 2
-      end
-    end
     object rbpImpuestos: TRibbonPage
       AlignWithMargins = True
       Left = 0
@@ -261,6 +226,41 @@ object fPrincipal: TfPrincipal
         ActionManager = acmMenuPrincipal
         Caption = 'Informes'
         GroupIndex = 3
+      end
+    end
+    object rbpVales: TRibbonPage
+      Left = 0
+      Top = 50
+      Width = 1599
+      Height = 93
+      Caption = 'Vales Gastos Fijos y Otros'
+      Index = 4
+      object rgpCategorias: TRibbonGroup
+        Left = 4
+        Top = 3
+        Width = 70
+        Height = 86
+        ActionManager = acmMenuPrincipal
+        Caption = 'Categor'#237'as'
+        GroupIndex = 0
+      end
+      object rgpVales: TRibbonGroup
+        Left = 76
+        Top = 3
+        Width = 1060
+        Height = 86
+        ActionManager = acmMenuPrincipal
+        Caption = 'Vales Gastos Fijos y Otros'
+        GroupIndex = 1
+      end
+      object rgpHistorico: TRibbonGroup
+        Left = 1138
+        Top = 3
+        Width = 140
+        Height = 86
+        ActionManager = acmMenuPrincipal
+        Caption = 'Hist'#243'rico'
+        GroupIndex = 2
       end
     end
     object rbpTablero: TRibbonPage
@@ -316,38 +316,38 @@ object fPrincipal: TfPrincipal
         GroupIndex = 4
       end
     end
-    object rbpVales: TRibbonPage
+    object rbpCuentasCorrientes: TRibbonPage
       Left = 0
       Top = 50
       Width = 1599
       Height = 93
-      Caption = 'Vales Gastos Fijos y Otros'
-      Index = 4
-      object rgpCategorias: TRibbonGroup
+      Caption = 'Cuentas Corrientes'
+      Index = 2
+      object RibbonGroup11: TRibbonGroup
         Left = 4
         Top = 3
-        Width = 70
+        Width = 130
         Height = 86
         ActionManager = acmMenuPrincipal
-        Caption = 'Categor'#237'as'
+        Caption = 'Cuentas Corrientes'
         GroupIndex = 0
       end
-      object rgpVales: TRibbonGroup
-        Left = 76
+      object RibbonGroup12: TRibbonGroup
+        Left = 136
         Top = 3
-        Width = 1060
+        Width = 545
         Height = 86
         ActionManager = acmMenuPrincipal
-        Caption = 'Vales Gastos Fijos y Otros'
+        Caption = 'Listados'
         GroupIndex = 1
       end
-      object rgpHistorico: TRibbonGroup
-        Left = 1138
+      object RibbonGroup13: TRibbonGroup
+        Left = 683
         Top = 3
-        Width = 140
+        Width = 197
         Height = 86
         ActionManager = acmMenuPrincipal
-        Caption = 'Hist'#243'rico'
+        Caption = 'Historial'
         GroupIndex = 2
       end
     end
@@ -807,8 +807,8 @@ object fPrincipal: TfPrincipal
             CommandProperties.ButtonSize = bsLarge
           end
           item
-            Action = actListadoDeuda
-            Caption = '&Listado de Deuda'
+            Action = actListadoDeudabot
+            Caption = '&Listado de Deuda Bot'
             CommandProperties.ButtonSize = bsLarge
           end>
         ActionBar = RibbonGroup11
@@ -1166,6 +1166,7 @@ object fPrincipal: TfPrincipal
           end
           item
             Action = actSoloInformativos
+            Caption = '&Solo Informativos'
             CommandProperties.ButtonSize = bsLarge
           end
           item
@@ -1911,9 +1912,9 @@ object fPrincipal: TfPrincipal
       Caption = 'actLecturaIA'
       OnExecute = actLecturaIAExecute
     end
-    object actListadoDeuda: TAction
-      Caption = 'Listado de Deuda'
-      OnExecute = actListadoDeudaExecute
+    object actListadoDeudabot: TAction
+      Caption = 'Listado de Deuda Bot'
+      OnExecute = actListadoDeudabotExecute
     end
     object actSoloInformativos: TAction
       Caption = 'Solo Informativos'

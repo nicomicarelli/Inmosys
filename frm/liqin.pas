@@ -30,7 +30,7 @@ uses
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxNavigator, cxDBData, cxCheckBox, cxGridLevel, cxGridCustomTableView,
   cxGridTableView, cxGridDBTableView, cxClasses, cxGridCustomView, cxGrid,
-  ppSubRpt, dxGDIPlusClasses;
+  ppSubRpt, dxGDIPlusClasses, frmDeudaImpuestos;
 type
   TFrmLiquidacionInquilinos = class(TForm)
     plTitulo: TppJITPipeline;
@@ -338,6 +338,53 @@ type
     raCodeModule8: TraCodeModule;
     ppDesignLayers8: TppDesignLayers;
     ppDesignLayer8: TppDesignLayer;
+    ppDBText30: TppDBText;
+    ppDBText31: TppDBText;
+    AdvGlowButton2: TAdvGlowButton;
+    ReporteDeuda: TppReport;
+    ppTitleBand7: TppTitleBand;
+    ppShape8: TppShape;
+    ppLabel58: TppLabel;
+    ppLabel59: TppLabel;
+    ppLabel60: TppLabel;
+    ppDBText32: TppDBText;
+    ppLabel61: TppLabel;
+    ppLabel62: TppLabel;
+    ppLabel63: TppLabel;
+    ppLabel64: TppLabel;
+    ppLabel65: TppLabel;
+    ppLabel66: TppLabel;
+    ppLabel67: TppLabel;
+    ppLabel68: TppLabel;
+    ppShape9: TppShape;
+    ppVariable44: TppVariable;
+    ppVariable45: TppVariable;
+    ppLabel69: TppLabel;
+    ppImage5: TppImage;
+    ppHeaderBand8: TppHeaderBand;
+    ppVariable47: TppVariable;
+    ppVariable48: TppVariable;
+    ppImage6: TppImage;
+    ppSubReport4: TppSubReport;
+    ppChildReport4: TppChildReport;
+    ppTitleBand8: TppTitleBand;
+    ppDBText33: TppDBText;
+    ppDetailBand11: TppDetailBand;
+    ppVariable49: TppVariable;
+    ppVariable50: TppVariable;
+    ppSummaryBand11: TppSummaryBand;
+    raCodeModule11: TraCodeModule;
+    ppDesignLayers11: TppDesignLayers;
+    ppDesignLayer11: TppDesignLayer;
+    ppDetailBand12: TppDetailBand;
+    ppSummaryBand12: TppSummaryBand;
+    ppDBText34: TppDBText;
+    ppDBText35: TppDBText;
+    raCodeModule12: TraCodeModule;
+    ppDesignLayers12: TppDesignLayers;
+    ppDesignLayer12: TppDesignLayer;
+    ppParameterList8: TppParameterList;
+    plTituloppField11: TppField;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
 //    procedure BitBtn2Click(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
@@ -372,6 +419,7 @@ type
     procedure AdvGlowButton1Click(Sender: TObject);
     procedure Columna_ImporteGetDisplayText(Sender: TcxCustomGridTableItem;
       ARecord: TcxCustomGridRecord; var AText: string);
+    procedure AdvGlowButton2Click(Sender: TObject);
   private
     objMail: TMail;
   public
@@ -604,6 +652,7 @@ var
  mesi,anoi:integer;
  Deuda: Double;
  Resultado: Boolean;
+ q: TFXQuery;
 begin
   btnGrabar.Enabled := True;
   if Key = #13 then
@@ -657,7 +706,10 @@ begin
       edCtaCte.Text := FormatFloat('0.00', Deuda);
       if not fDeEnvioMails then
         if not MostrarDialogoSiNo('El Inquilino posee deuda previa al dia ' + edit7.Text + ' por $ '+ FormatFloat('0.00', Deuda)+' ¿Desea cobrarle de todos modos?', mbYes) then
+        begin
           btnGrabar.Enabled := False;
+          Exit;
+        end;
 
       prCalcularDeudas;
     end
@@ -1560,8 +1612,15 @@ function TFrmLiquidacionInquilinos.plTituloGetFieldValue(
   aFieldName: string): Variant;
 var
   q: TFXQuery;
-
+  FormatoPersonalizado: TFormatSettings;
 begin
+  // Inicializamos con la configuración regional actual como base
+  FormatoPersonalizado := TFormatSettings.Create;
+
+  // Forzamos los separadores deseados
+  FormatoPersonalizado.DecimalSeparator := ',';
+  FormatoPersonalizado.ThousandSeparator := '.';
+
   if aFieldName = 'Fecha' then
     Result := gImpresion.Cells[2,1]
   else if aFieldName = 'Numero' then
@@ -1581,7 +1640,9 @@ begin
   else if aFieldName = 'Total' then
     Result := gImpresion.Cells[8,1]
   else if aFieldName = 'Letras' then
-    Result := gImpresion.Cells[9,1]
+    Result := 'Recibi la suma de PESOS: ' + gImpresion.Cells[9,1] + '  ($ ' + gImpresion.Cells[8,1] + ')'
+  else if aFieldName = 'Deuda' then
+    Result := 'Total Adeudado:  $ ' + FormatFloat('###,###,##0.00', ToFloat(AnsiReplacestr(gImpresion.Cells[8,1], '.-)','')), FormatoPersonalizado)
   else if aFieldName = 'Inquilino' then
     Result := gImpresion.Cells[1,1]
   else if aFieldName = 'Direccion' then
@@ -1655,7 +1716,31 @@ begin
     if boTieneDeuda then
       if not MostrarDialogoSiNo('El Inquilino posee deuda de Alquiler/Saldo Alquiler ¿Desea cobrarle de todos modos?', mbNO) then
         btnGrabar.Enabled := False;
+      q.sql.text := ' select ca.codigo, ca.descripcion, Sum(cu.entra - cu.sale) as deuda '+
+                    '  from cuerpovales cu '+
+                    ' inner join cabezavales ca on ca.codigo = cu.codigo '+
+                    ' where cu.codinq = :Codigo '+
+                    '   and ca.codigoempresa in (1,2,3) '+
+                    '   and cu.codigoitem = ''09'' '+
+                    '   and cu.fecha < :fecha '+
+                    '   and ca.cerrado = 0 '+
+                    ' group by 1,2 '+
+                    ' having Sum(cu.entra - cu.sale) > 0 ';
+      q.ParamByName('Codigo').AsString      := Edit1.Text;
+      q.ParamByName('Fecha').AsDatetime     := StrToDate(Edit6.Text);
+      q.Open;
 
+      if not q.IsEmpty then
+      begin
+        TFDeudaImpuestos.Ejecutar(q);
+        if not MostrarDialogoSiNo('ATENCION!!!'+
+          #13#10+'El inquilino posee cosas pendientes en los vales. Por favor reviselos.'+
+          #13#10+'¿Desea continuar de todos modos?', mtWarning,mbNO ) then
+        begin
+          btnGrabar.Enabled := False;
+          Exit;
+        end;
+      end;
   finally
     q.Free;
   end;
@@ -3030,8 +3115,16 @@ begin
     objMail := TMail.Create;
     objMail.idPlantilla := 3;
     objMail.DireccionMail := qImpuestos.FieldByName('MailInquilino').AsString;
-    objMail.Titulo := 'Recibo para Inquilinos ';
-    objMail.Asunto := 'Recibo para Inquilinos ';
+    if FDeEnvioMails then
+    begin
+      objMail.Titulo := 'Listado de deuda ';
+      objMail.Asunto := 'Listado de deuda ';
+    end
+    else
+    begin
+      objMail.Titulo := 'Recibo para Inquilinos ';
+      objMail.Asunto := 'Recibo para Inquilinos ';
+    end;
     objMail.Mes := DevuelveMes(MonthOf(StrToDate(Edit8.Text)));
     objMail.Anio := YearOf(StrToDate(Edit8.Text));
 
@@ -3070,6 +3163,133 @@ begin
     FreeAndNil(qImpuestos);
   end;
 
+end;
+
+procedure TFrmLiquidacionInquilinos.AdvGlowButton2Click(Sender: TObject);
+var
+  qImpuestos: tFXQuery;
+  I,J: Integer;
+  stUbicacion: string;
+  stInquilino: string;
+  Letras: string;
+  Resultado: Boolean;
+  Estado: Boolean;
+  Suma: DOuble;
+  Importe: string;
+  Recibo: String;
+begin
+  cdsAnomalias.EmptyDataSet;
+
+  Resultado := False;
+
+  gImpresion.Vaciar;
+  qImpuestos:= CrearQuery;
+  try
+    LiqinOrig.Close;
+    LiqinOrig.Open;
+
+    qImpuestos.SQL.Text := 'Select MailInquilino, PlantillaInquilino, EntregarImpuestos from Inmuebles where codinq =:codinq';
+    qImpuestos.Parambyname('Codinq').AsString := LiqinOrig.FieldByName('Codinq').AsString;
+    qImpuestos.Open;
+
+    I := 1;
+
+    Suma := 0;
+    cdsDatos.First;
+    while not cdsDatos.Eof do
+    begin
+      if cdsDatos.FieldbyName('Seleccionado').AsBoolean then
+        Suma := Suma + cdsDatos.FieldbyName('Importe').AsFloat;
+
+      cdsDatos.Next;
+    end;
+    Importe := FormatFloat('0.00', Suma);
+    Letras := ImporteEnLetras(Importe);
+
+    cdsDatos.First;
+    LiqinOrig.First;
+    gImpresion.Vaciar;
+    while not LiqinOrig.eof do
+    begin
+      cdsDatos.First;
+
+      while not cdsDatos.eof do
+      begin
+        if (LiqinOrig.FieldByName('Item').AsString = cdsDatos.FieldByName('Item').AsString) and
+           (LiqinOrig.FieldByName('Periodo').AsString = cdsDatos.FieldByName('Descripcion').AsString) and
+           (ToFloat(LiqinOrig.FieldByName('Importe').AsString) = ToFloat(cdsDatos.FieldByName('Importe').AsString)) and
+           (LiqinOrig.FieldByName('coditem').AsString = cdsDatos.FieldByName('Coditem').AsString) and
+           (cdsDatos.FieldByName('Seleccionado').AsBoolean) then
+        begin
+          gImpresion.Cells[0,I] := LiqinOrig.FieldByName('Codinq').AsString;
+          gImpresion.Cells[1,I] := LiqinOrig.FieldByName('Inquilino').AsString;
+          gImpresion.Cells[2,I] := LiqinOrig.FieldByName('Fecha').AsString;
+          gImpresion.Cells[3,I] := LiqinOrig.FieldByName('Direccion').AsString;
+          gImpresion.Cells[4,I] := LiqinOrig.FieldByName('Iva').AsString;
+          gImpresion.Cells[5,I] := LiqinOrig.FieldByName('Item').AsString;
+          gImpresion.Cells[6,I] := LiqinOrig.FieldByName('Periodo').AsString;
+          gImpresion.Cells[7,I] := LiqinOrig.FieldByName('Importe').AsString;
+          gImpresion.Cells[8,I] := FormatFloat('0.00', Suma) + '.-)';
+          gImpresion.Cells[9,I] := Letras;
+          gImpresion.Cells[10,I] := LiqinOrig.FieldByName('Coditem').AsString;
+          gImpresion.Cells[11,I] := LiqinOrig.FieldByName('DniPropietario').AsString;
+          gImpresion.Cells[12,I] := LiqinOrig.FieldByName('Propietario').AsString;
+          gImpresion.Cells[13,I] := LiqinOrig.FieldByName('IDMovimiento').AsString;
+          Inc(i);
+        end;
+        cdsDatos.Next;
+      end;
+      LiqinOrig.Next;
+    end;
+
+    gImpresion.SortColumn(9,True, 'N');
+    if i>2 then
+      gImpresion.RowCount := I
+    else
+      gImpresion.RowCount := 2;
+
+    objMail := TMail.Create;
+    objMail.idPlantilla := 3;
+    objMail.DireccionMail := qImpuestos.FieldByName('MailInquilino').AsString;
+    objMail.Titulo := 'Listado de deuda ';
+    objMail.Asunto := 'Listado de deuda ';
+    objMail.Mes := DevuelveMes(MonthOf(StrToDate(Edit8.Text)));
+    objMail.Anio := YearOf(StrToDate(Edit8.Text));
+
+    cdsDatos.First;
+    gDetalleSeleccion.Vaciar;
+    I := 1;
+    while not cdsDatos.Eof do
+    begin
+      if cdsDatos.FieldByName('Seleccionado').AsBoolean then
+      begin
+        gDetalleSeleccion.Cells[0,I] := cdsDatos.FieldByName('Item').AsString;
+        gDetalleSeleccion.Cells[1,I] := cdsDatos.FieldByName('Descripcion').AsString;
+        gDetalleSeleccion.Cells[2,I] := cdsDatos.FieldByName('Importe').AsString;
+        gDetalleSeleccion.Cells[3,I] := cdsDatos.FieldByName('Coditem').AsString;
+        Inc(I);
+      end;
+      cdsDatos.Next;
+    end;
+
+    if I > 2  then
+      gDetalleSeleccion.RowCount := I + 1
+    else
+      gDetalleSeleccion.RowCount := 2;
+
+    if FDeEnvioMails then
+      ImprimirReporte ( False, ReporteDeuda, objMail,  plReporte,  gDetalleSeleccion )
+    else
+      ImprimirReporte ( ReporteDeuda, objMail,  plReporte,  gDetalleSeleccion ) ;
+
+    stUbicacion := Edit5.Text;
+    Edit5.Properties.OnChange := nil;
+    stInquilino := Edit2.Text;
+
+    Edit5.Properties.OnChange := Edit5PropertiesChange;
+  finally
+    FreeAndNil(qImpuestos);
+  end;
 end;
 
 procedure TFrmLiquidacionInquilinos.actImpuestosAlPropietarioExecute(

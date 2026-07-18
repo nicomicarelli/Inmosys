@@ -142,6 +142,7 @@ type
     procedure chSinCubrirClick(Sender: TObject);
     procedure Cambiaritemal27Click(Sender: TObject);
     procedure CambiarItemal9Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FOperacion: TTipoOperacion;
     ds: TDataSource;
@@ -216,6 +217,12 @@ begin
   TablaCuerpo := 'CuerpoVales';
 
   prPrepararDataset;
+end;
+
+procedure TFVales.FormShow(Sender: TObject);
+begin
+  if (cbCategoria.EditValue = 2) and (fPrincipal.FUsuario = 'EDUARDO') then
+    btnGrabar.Visible := False;
 end;
 
 procedure TFVales.gDatosCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -542,8 +549,9 @@ begin
   cdsDatos.DisableControls;
   try
     qCuerpo.SQL.Text :=
-      ' Select * from '+ TablaCuerpo +
-      '  Where Codigo = :Codigo';
+      ' Select V.* from '+ TablaCuerpo + ' V '+
+//      '  Inner Join Inmuebles I on V.Codinq = I.Codinq '+
+      '  Where V.Codigo = :Codigo';
     qCuerpo.ParamByName('Codigo').AsInteger := FCodigo;
     qCuerpo.Open;
       cdsDatos.EmptyDataset;

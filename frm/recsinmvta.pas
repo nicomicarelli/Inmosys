@@ -7,7 +7,7 @@ uses
   StdCtrls, ExtCtrls, Buttons, DBTables, Db, ImgList,
   ComCtrls, ToolWin, ppDB, ppDBJIT, ppParameter, ppBands, ppCtrls, ppPrnabl,
   ppClass, ppCache, ppComm, ppRelatv, ppProd, ppReport, sqlExpr, ppDesignLayer,
-  FXQuery, AdvGlowButton;
+  FXQuery, AdvGlowButton, ppModule, raCodMod, dxGDIPlusClasses, ppVar;
 
 type
   TfrecSinmvta = class(TForm)
@@ -95,6 +95,68 @@ type
     Edit5: TEdit;
     Edit4: TEdit;
     Edit2: TEdit;
+    ReporteFijoDuplicado: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel31: TppLabel;
+    ppLabel32: TppLabel;
+    ppLabel33: TppLabel;
+    ppDBText17: TppDBText;
+    ppLabel34: TppLabel;
+    ppLabel42: TppLabel;
+    ppLabel43: TppLabel;
+    ppLabel44: TppLabel;
+    ppLabel45: TppLabel;
+    ppLabel46: TppLabel;
+    ppLabel47: TppLabel;
+    ppLabel48: TppLabel;
+    ppShape2: TppShape;
+    ppVariable1: TppVariable;
+    ppLabel49: TppLabel;
+    ppLabel50: TppLabel;
+    ppVariable2: TppVariable;
+    ppImage1: TppImage;
+    ppHeaderBand3: TppHeaderBand;
+    ppImage2: TppImage;
+    ppVariable3: TppVariable;
+    ppDetailBand3: TppDetailBand;
+    ppSummaryBand1: TppSummaryBand;
+    raCodeModule1: TraCodeModule;
+    ppDesignLayers3: TppDesignLayers;
+    ppDesignLayer3: TppDesignLayer;
+    ppParameterList3: TppParameterList;
+    ReporteFijo: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppShape3: TppShape;
+    ppLabel35: TppLabel;
+    ppLabel36: TppLabel;
+    ppLabel37: TppLabel;
+    ppDBText18: TppDBText;
+    ppLabel38: TppLabel;
+    ppLabel39: TppLabel;
+    ppLabel40: TppLabel;
+    ppLabel41: TppLabel;
+    ppLabel51: TppLabel;
+    ppLabel52: TppLabel;
+    ppLabel53: TppLabel;
+    ppLabel54: TppLabel;
+    ppShape4: TppShape;
+    ppVariable4: TppVariable;
+    ppLabel55: TppLabel;
+    ppLabel56: TppLabel;
+    ppVariable5: TppVariable;
+    ppImage3: TppImage;
+    ppHeaderBand4: TppHeaderBand;
+    ppImage4: TppImage;
+    ppVariable6: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand2: TppSummaryBand;
+    raCodeModule2: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList4: TppParameterList;
+    plDatosppField5: TppField;
+    plDatosppField10: TppField;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4KeyPress(Sender: TObject; var Key: Char);
@@ -122,8 +184,8 @@ uses FrmPrincipal, FrmDatos, Funciones, recrinmvta;
 {$R *.DFM}
 procedure TfrecSinmvta.btnImprimirClick(Sender: TObject);
 begin
-  ImprimirReporte(Reporte, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
-  ImprimirReporte(ReporteDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
+  ImprimirReporte(ReporteFijo, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
+  ImprimirReporte(ReporteFijoDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
 end;
 
 procedure TfrecSinmvta.btnSalirClick(Sender: TObject);
@@ -219,6 +281,10 @@ var
   I:           Integer;
   J:           Integer;
   Monto:       Currency;
+  Numero:    String;
+  Texto: String;
+  q: TFXQuery;
+
 begin
   Inquilino := Edit3.Text;
   Ubicacion := Combobox1.Text;
@@ -238,6 +304,28 @@ begin
   for I := J to 120 do
     Escribania := Escribania + '/';
 
+
+  Texto := 'Son Pesos: ' + Letras +'(' + Floattostr(Monto) + ')' + #13#10+
+           'Seña del inmueble ubicado en calle ' + Combobox1.Text  + ' que se compromete adquirir por el precio total de ' + Edit7.text  +
+           ' La correspondiente escritura deberá firmarse el ' + Edit6.text + ' en la escribanía ' + Edit5.text +
+           ' quien interviene en esta operación y cobrará en dicho acto el monto correspondiente a la escritura traslativa de dominio y el 3% '+
+           ' en concepto de comisión al corredor inmobiliario sobre el total de la venta. Si en la fecha indicada precedentemente el presunto comprador '+
+           ' no se presentara a firmar la escritura respectiva, o si la operación no pudiera concretarse por cualquier motivo que presenten las partes, '+
+           'la suma entregada será devuelta y el propietario del inmueble podrá disponer libremente de la propiedad motivo de la presente.'+
+           #13#10+
+           #13#10+
+           'De conformidad con los términos del presente recibo.';
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
+
   if afieldName='Fecha' then
     Result := Fecha;
   if afieldName='FechaVenta' then
@@ -254,6 +342,11 @@ begin
     Result := Ubicacion;
   if afieldName='Escribania' then
     Result := Escribania;
+  if aFieldName = 'Texto' then
+    Result := Texto;
+  if aFieldName = 'Numero' then
+    Result := Numero;
+
 end;
 
 

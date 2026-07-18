@@ -113,6 +113,7 @@ type
     { Private declarations }
   public
     FSoloPendientes : Boolean;
+    boVieneDeHilo : Boolean;
     { Public declarations }
   end;
 
@@ -144,7 +145,7 @@ begin
 
     q.SQL.Add(
       ' where V.CodigoCategoria = 15 '+
-      '   and CA.Fecha >= ''08/01/2020'' '+
+      '   and CA.Fecha >= ''08/01/2023'' '+
       '   and V.Cerrado = 0 '+
       '   and R.Tipo <> ''LI'' '+
       '   and V.Codinq = R.Codinq '+
@@ -167,7 +168,7 @@ begin
       '    when V.MES = 12 then ''DICIEMBRE'' '+
       '    end) '+
       '   and not exists (Select Codinq from CuerpoVales '+
-      '   where DESCRIPCION = R.Tipo || '' '' || R.Letra || '' '' || Substring(lpad(substring(R.Numero from 1 for Position(''.'', r.numero)-1),12,''0'') '+
+      '   where CODIGOCATEGORIA = 15 and DESCRIPCION = R.Tipo || '' '' || R.Letra || '' '' || Substring(lpad(substring(R.Numero from 1 for Position(''.'', r.numero)-1),12,''0'') '+
       '    from 1 for 4)||''-''||Substring(lpad(substring(R.Numero from 1 for Position(''.'', r.numero)-1),12,''0'') from 5 for 8) || '' - '' || R.Periodo) ');
     if not Todos.Checked then
     begin
@@ -385,8 +386,11 @@ begin
         end;
       end;
       DM.ConfirmarTransaccion;
-      MostrarDialogoAceptar('Datos grabados correctamente.');
-      ActualizarClick(nil);
+      if not boVieneDeHilo then
+      begin
+        MostrarDialogoAceptar('Datos grabados correctamente.');
+        ActualizarClick(nil);
+      end;
     except
       DM.CancelarTransaccion;
     end;
@@ -554,6 +558,7 @@ end;
 procedure TfCubrirValesSaldoAlquiler.FormCreate(Sender: TObject);
 begin
   fPrincipal.Center(Self);
+  boVieneDeHilo := False;
 end;
 
 procedure TfCubrirValesSaldoAlquiler.gDetalleDblClick(Sender: TObject);

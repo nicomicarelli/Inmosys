@@ -65,28 +65,14 @@ type
     ppLabel5: TppLabel;
     reporte2: TppReport;
     ppTitleBand2: TppTitleBand;
-    ppLabel7: TppLabel;
-    ppLabel9: TppLabel;
-    ppLabel12: TppLabel;
-    ppLabel13: TppLabel;
-    ppRegion1: TppRegion;
-    ppLabel14: TppLabel;
-    ppDBText6: TppDBText;
-    ppDBText7: TppDBText;
     ppHeaderBand2: TppHeaderBand;
-    ppLine4: TppLine;
     ppLabel15: TppLabel;
     ppLabel17: TppLabel;
-    ppLine5: TppLine;
     ppLabel19: TppLabel;
     ppDetailBand2: TppDetailBand;
     ppDBText8: TppDBText;
     ppDBText12: TppDBText;
     ppDBText14: TppDBText;
-    ppFooterBand2: TppFooterBand;
-    ppLine6: TppLine;
-    ppSystemVariable3: TppSystemVariable;
-    ppSystemVariable4: TppSystemVariable;
     ppParameterList2: TppParameterList;
     plreporte1: TppJITPipeline;
     plreporte2: TppField;
@@ -178,6 +164,12 @@ type
     Label9: TLabel;
     Shape2: TShape;
     Label10: TLabel;
+    ppLabel6: TppLabel;
+    ppDBText3: TppDBText;
+    plreporte1ppField5: TppField;
+    plreporte1ppField6: TppField;
+    ppLabel7: TppLabel;
+    ppDBText6: TppDBText;
     procedure ActualizarClick(Sender: TObject);
     procedure TodosCodigosClick(Sender: TObject);
     procedure edDesdeChange(Sender: TObject);
@@ -230,7 +222,7 @@ uses frmInmuebles, frmPrincipal, frmDatosFijos, frmABMContratos,
 
 procedure TfListadoCobrados.ActualizarClick(Sender: TObject);
 var
-  q, q1, q2, q3, q4, Q5, qInquilino: TFXQuery;
+  q, q1, q2, q3, q4, Q5, qp, qInquilino: TFXQuery;
   I, J, K, Posicion: Integer;
   FechaDesde, FechaHasta: TDatetime;
   FechaDesdeDeuda, FechaHastaDeuda: TDatetime;
@@ -247,6 +239,7 @@ begin
   q3 := DM.FxCrearQuery(opOptimizaSelect);
   q4 := DM.FxCrearQuery(opOptimizaSelect);
   q5 := DM.FxCrearQuery(opOptimizaSelect);
+  qP := DM.FxCrearQuery(opOptimizaSelect);
   qInquilino := DM.FxCrearQuery;
 
   GdETALLE.Vaciar;
@@ -261,6 +254,7 @@ begin
   q3.DisableControls;
   q4.DisableControls;
   q5.DisableControls;
+  qP.DisableControls;
   qInquilino.DisableControls;
   try
     FechaDesde := StrToDate(Edit6.Text);
@@ -268,7 +262,7 @@ begin
     FechaDesdeDeuda := StrToDate(edFechaDesde.Text);
     FechaHastaDeuda := StrToDate(edFechaHasta.Text);
 
-    qInquilino.SQL.Text := ' Select i.Codinq, I.Inquilino, I.Propietario, I.MailInquilino, I.Prelegales, I.Desocupado, A.Pagare, I.Legales, I.JuicioDesalojo, I.JuicioPVE ' +
+    qInquilino.SQL.Text := ' Select i.Codinq, I.Inquilino, I.Propietario, I.MailInquilino, I.Prelegales, I.Desocupado, A.Pagare, I.Legales, I.JuicioDesalojo, I.JuicioPVE, I.DniInquilino as DNI ' +
                   '   from  Inmuebles I '+
                   '   Inner Join Automatizacion A on A.Codinq = I.Codinq '+
                   '  Where 1=1 ';
@@ -309,8 +303,11 @@ begin
     I := 1;
     J := 1;
     Posicion := 0;
-    ProgressBar1.Min := 0;
-    ProgressBar1.Max := qInquilino.RecordCount - 1;
+    if qInquilino.RecordCount > 0 then
+    begin
+      ProgressBar1.Min := 0;
+      ProgressBar1.Max := qInquilino.RecordCount - 1;
+    end;
 
       FormatSettings.DecimalSeparator := ',';
       FormatSettings.ThousandSeparator := '.';
@@ -495,6 +492,45 @@ begin
         end;
         q3.Open;
 
+        qp.SQL.Text := ' select sum(cast(I.IMPORTE as double precision)) as DEUDA, '+
+             ' SUM(CASE WHEN ((CURRENT_DATE - CAST(SUBSTRING(FECHA FROM 5 FOR 2)||''/''||''01''||''/''|| '+
+             '   SUBSTRING(FECHA FROM 1 FOR 4) AS DATE) + 1) - cast(REPLACE(fechapago, ''1º al '', '''') as integer) > 0) THEN '+
+             '   (CURRENT_DATE - CAST(SUBSTRING(FECHA FROM 5 FOR 2)||''/''||''01''||''/''||SUBSTRING(FECHA FROM 1 FOR 4) AS DATE) + 1) '+
+             '   * 0.005 * cast(I.IMPORTE as double precision) else 0 END) AS PUNITORIOS '+
+             ' from (select I.FECHA, I.CODINQ, I.CODITEM, I.ITEM, I.PERIODO, I.IMPORTE '+
+             '       from ITEMAUTOM I                                                  '+
+             '       where I.CODINQ = :CODINQ and                                      '+
+             '             I.IMPORTE <> '''' and                                         '+
+             '             cast(replace(I.IMPORTE, '', '', ''.'') as double precision) <> 0) I'+
+             ' inner join(select CODIGO, INQPROP                                            '+
+             '            from CONCEPTOS                                                      '+
+             '            where INQPROP <> 2) C on C.CODIGO = I.CODITEM                         '+
+             ' inner join(select A.CODINQ, A.FECHAINICIO, A.INQUILINO, A.MAILINQUILINO, A.fechapago '+
+             '            from INMUEBLES A '+
+             '            order by A.CODINQ) A on A.CODINQ = I.CODINQ '+
+             ' where I.CODINQ = :CODINQ and '+
+             '       cast(substring(I.FECHA from 5 for 2) || ''/'' || substring(I.FECHA from 7 for 2) || ''/'' || substring(I.FECHA from 1 for 4) as timestamp) >= A.FECHAINICIO and '+
+             '       I.CODITEM in (''01'',''08'',''20'',''30'') and '+
+             '       C.INQPROP <> 2 and '+
+             '       not exists(select CU.CODITEM '+
+             '                  from CUERPORECIBOS CU '+
+             '                  inner join CABEZARECIBOS CA on CA.CODINQ = CU.CODINQ '+
+             '                  where CA.CODINQ = I.CODINQ and '+
+             '                        CU.CODINQ = :CODINQ and '+
+             '                        CU.CODITEM = I.CODITEM and '+
+             '                        CU.CODITEM in (''01'',''20'',''30'',''08'') and '+
+             '                        CU.TIPO = ''RE'' and '+
+             '                        CU.ITEM = I.ITEM and '+
+             '                        CU.PERIODO = I.PERIODO) ';
+            if not chFechas.Checked then
+            begin
+              qP.SQL.Add(' and I.Fecha >=:FechaDesde and I.Fecha <=:FechaHasta ');
+              qP.ParamByName('FechaDesde').AsString := FormatDatetime('YYYYMMDD',FechaDesdeDeuda);
+              qP.ParamByName('FechaHasta').AsString := FormatDatetime('YYYYMMDD',FechaHastaDeuda);
+            end;
+            qp.ParamByName('Codinq').AsString := qInquilino.FieldByName('Codinq').AsString;
+
+            qP.Open;
         if J>1 then
         BEGIN
           gDetalle1.RowCount := J;
@@ -505,6 +541,7 @@ begin
           gDetalle1.RowCount := 2;
           gDeuda.RowCount := 2;
         end;
+
 
         if (Abs(q1.FieldByName('Deuda').AsFloat) > 0.001) or
            (Abs(q2.FieldByName('Deuda').AsFloat) > 0.001) or
@@ -584,18 +621,21 @@ begin
           gDeuda.Cells[4,J] := FormatFloat('$#,##0.00', q2.FieldByName('Deuda').AsFloat);
           gDeuda.Cells[5,J] := FormatFloat('$#,##0.00', q3.FieldByName('Deuda').AsFloat);
           gDeuda.Cells[6,J] := FormatFloat('$#,##0.00', q1.FieldByName('Deuda').AsFloat + q2.FieldByName('Deuda').AsFloat + q3.FieldByName('Deuda').AsFloat + q5.FieldByName('Deuda').AsFloat);
+          gDeuda.Cells[7,J] := FormatFloat('$#,##0.00', Ceil(qp.FieldByName('Punitorios').AsFloat));
 
-          if ToFloat(gDeuda.Cells[7,J]) <= 0 then
-            gDeuda.Cells[7,J] := '0.00';
-          gDeuda.Cells[8,J] := FormatFloat('$#,##0.00', q1.FieldByName('Deuda').AsFloat + q2.FieldByName('Deuda').AsFloat + q3.FieldByName('Deuda').AsFloat + q5.FieldByName('Deuda').AsFloat + ToFloat(gDetalle1.Cells[6,J]));
+//          if ToFloat(gDeuda.Cells[7,J]) <= 0 then
+//            gDeuda.Cells[7,J] := '0.00';
+          gDeuda.Cells[8,J] := FormatFloat('$#,##0.00', q1.FieldByName('Deuda').AsFloat + q2.FieldByName('Deuda').AsFloat + q3.FieldByName('Deuda').AsFloat + q5.FieldByName('Deuda').AsFloat + ToFloat(gDetalle1.Cells[6,J])+Ceil(qp.FieldByName('Punitorios').AsFloat));
           gDeuda.Cells[9,J] := qInquilino.FieldByName('MailInquilino').AsString;
+          gDeuda.Cells[10,J] := qInquilino.FieldByName('DNI').AsString;
 
           Inc(J);
         end;
 
       qInquilino.Next;
       Inc(Posicion);
-      ProgressBar1.Position := Posicion;
+      if Posicion <= ProgressBar1.Max then
+        ProgressBar1.Position := Posicion;
       Application.ProcessMessages;
     end;
     if i>2 then
@@ -739,7 +779,7 @@ begin
         edit6KeyPress(Sender, Tecla);
         edit8.Text := edFechaHasta.Text;
         edit8KeyPress(Sender, Tecla);
-        advGlowButton1Click(nil);
+        advGlowButton2Click(nil);
         Application.ProcessMessages;
         btnSalirClick(nil);
         Application.ProcessMessages;
@@ -798,12 +838,13 @@ begin
     gDetalle1.Cells[6, j] := gDeuda.Cells[7, I];
     gDetalle1.Cells[7, j] := gDeuda.Cells[8, I];
     gDetalle1.Cells[8, j] := gDeuda.Cells[9, I];
+    gDetalle1.Cells[9, j] := gDeuda.Cells[10, I];
     Inc(J);
     gDetalle1.RowCount := gDetalle1.RowCount + 1;
   end;
 
   if Self = fListadoDeudaBot then
-    ImprimirReporte ( ReporteBot,  plReporte,  gDetalle1 )
+    ImprimirReporte ( Reporte2,  plReporte1,  gDetalle1 )
   else
     ImprimirReporte ( Reporte,  plReporte,  gDetalle1 ) ;
 end;
@@ -954,7 +995,7 @@ begin
   boMostrarMensaje := True;
 
   chDesocupados.Checked  := (Self <> fListadoDeudaBot);
-  chPrelegales.Checked   := (Self <> fListadoDeudaBot);
+  chPrelegales.Checked   := False;
   chDesocupados.Visible  := (Self <> fListadoDeudaBot);
   chPrelegales.Visible   := (Self <> fListadoDeudaBot);
   AdvGlowButton1.Visible := (Self <> fListadoDeudaBot);
@@ -962,9 +1003,9 @@ begin
   cbFechaPago.Visible := (Self <> fListadoDeudaBot);
   if (Self = fListadoDeudaBot) then
   begin
-    gDeuda.ColWidths[2] := gDeuda.ColWidths[2] + gDeuda.ColWidths[6] + gDeuda.ColWidths[7];
-    gDeuda.ColWidths[6] := -1;
-    gDeuda.ColWidths[7] := -1;
+//    gDeuda.ColWidths[2] := gDeuda.ColWidths[2] + gDeuda.ColWidths[6] + gDeuda.ColWidths[7];
+//    gDeuda.ColWidths[6] := -1;
+//    gDeuda.ColWidths[7] := -1;
   end;
 end;
 

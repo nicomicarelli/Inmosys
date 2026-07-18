@@ -31,7 +31,8 @@ uses
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   cxStyles, dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxNavigator, cxDBData, cxGridLevel, cxGridCustomTableView, cxGridTableView,
-  cxGridDBTableView, cxClasses, cxGridCustomView, cxGrid;
+  cxGridDBTableView, cxClasses, cxGridCustomView, cxGrid, ppStrtch, ppSubRpt,
+  dxGDIPlusClasses;
 
 type
   TFrmLiquidacionPropietarios = class(TForm)
@@ -139,6 +140,128 @@ type
     Columna_Ingreso: TcxGridDBColumn;
     chGastoBancario: TCheckBox;
     chRedondeo: TCheckBox;
+    ReporteFijo: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel5: TppLabel;
+    ppLabel6: TppLabel;
+    ppLabel7: TppLabel;
+    ppDBText5: TppDBText;
+    ppLabel8: TppLabel;
+    ppLabel9: TppLabel;
+    ppLabel10: TppLabel;
+    ppLabel11: TppLabel;
+    ppLabel12: TppLabel;
+    ppLabel13: TppLabel;
+    ppLabel14: TppLabel;
+    ppLabel15: TppLabel;
+    ppShape2: TppShape;
+    ppVariable11: TppVariable;
+    ppLabel16: TppLabel;
+    ppLabel17: TppLabel;
+    ppVariable13: TppVariable;
+    ppImage2: TppImage;
+    ppHeaderBand3: TppHeaderBand;
+    ppVariable14: TppVariable;
+    ppVariable15: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand4: TppSummaryBand;
+    raCodeModule4: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList3: TppParameterList;
+    ppLabel18: TppLabel;
+    ppVariable18: TppVariable;
+    ppVariable19: TppVariable;
+    ppDBText6: TppDBText;
+    plTituloppField2: TppField;
+    ppReport1: TppReport;
+    ppTitleBand3: TppTitleBand;
+    ppVariable12: TppVariable;
+    ppVariable20: TppVariable;
+    ppShape3: TppShape;
+    ppLabel19: TppLabel;
+    ppLabel20: TppLabel;
+    ppLabel21: TppLabel;
+    ppDBText7: TppDBText;
+    ppLabel22: TppLabel;
+    ppLabel23: TppLabel;
+    ppLabel24: TppLabel;
+    ppLabel25: TppLabel;
+    ppLabel26: TppLabel;
+    ppLabel27: TppLabel;
+    ppLabel28: TppLabel;
+    ppLabel29: TppLabel;
+    ppShape4: TppShape;
+    ppVariable21: TppVariable;
+    ppLabel30: TppLabel;
+    ppLabel31: TppLabel;
+    ppVariable22: TppVariable;
+    ppImage3: TppImage;
+    ppHeaderBand4: TppHeaderBand;
+    ppImage4: TppImage;
+    ppSubReport2: TppSubReport;
+    ppChildReport2: TppChildReport;
+    ppTitleBand4: TppTitleBand;
+    ppDetailBand5: TppDetailBand;
+    ppVariable23: TppVariable;
+    ppVariable24: TppVariable;
+    ppSummaryBand5: TppSummaryBand;
+    raCodeModule5: TraCodeModule;
+    ppDesignLayers5: TppDesignLayers;
+    ppDesignLayer5: TppDesignLayer;
+    ppDetailBand6: TppDetailBand;
+    ppSummaryBand6: TppSummaryBand;
+    ppLabel32: TppLabel;
+    ppVariable25: TppVariable;
+    ppVariable26: TppVariable;
+    ppDBText8: TppDBText;
+    raCodeModule6: TraCodeModule;
+    ppDesignLayers6: TppDesignLayers;
+    ppDesignLayer6: TppDesignLayer;
+    ppParameterList4: TppParameterList;
+    ppVariable16: TppVariable;
+    ppVariable17: TppVariable;
+    ppPageStyle1: TppPageStyle;
+    ppDesignLayer3: TppDesignLayer;
+    ppImage1: TppImage;
+    ReporteFDuplicado: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppHeaderBand5: TppHeaderBand;
+    ppShape5: TppShape;
+    ppLabel33: TppLabel;
+    ppLabel34: TppLabel;
+    ppLabel35: TppLabel;
+    ppDBText9: TppDBText;
+    ppLabel36: TppLabel;
+    ppLabel37: TppLabel;
+    ppLabel38: TppLabel;
+    ppLabel39: TppLabel;
+    ppLabel40: TppLabel;
+    ppLabel41: TppLabel;
+    ppLabel42: TppLabel;
+    ppLabel43: TppLabel;
+    ppShape6: TppShape;
+    ppVariable29: TppVariable;
+    ppLabel44: TppLabel;
+    ppLabel45: TppLabel;
+    ppVariable30: TppVariable;
+    ppImage5: TppImage;
+    ppDetailBand3: TppDetailBand;
+    ppVariable31: TppVariable;
+    ppVariable32: TppVariable;
+    ppSummaryBand3: TppSummaryBand;
+    ppLabel46: TppLabel;
+    ppVariable33: TppVariable;
+    ppVariable34: TppVariable;
+    ppDBText10: TppDBText;
+    ppPageStyle2: TppPageStyle;
+    ppImage6: TppImage;
+    raCodeModule3: TraCodeModule;
+    ppDesignLayers3: TppDesignLayers;
+    ppDesignLayer7: TppDesignLayer;
+    ppDesignLayer8: TppDesignLayer;
+    ppParameterList5: TppParameterList;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormActivate(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
@@ -958,10 +1081,24 @@ end;
 
 function TFrmLiquidacionPropietarios.plTituloGetFieldValue(
   aFieldName: string): Variant;
+VAR
+  Q:tfxqUERY;
 begin
   if aFieldName='Total' then
     Result := Edit12.Text
-  else if aFieldName='Documentacion' then
+  else if aFieldName = 'Numero' then
+  begin
+    q := CrearQuery;
+    try
+      q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''LI'' ';
+      q.Open;
+
+      Result := q.FieldByName('Cantidad').AsInteger;
+    finally
+      FreeAndNil(q);
+    end;
+  end
+   else if aFieldName='Documentacion' then
   begin
     if checkbox1.Checked then
       Result := 'DOCUMENTACION ADICIONAL ENTREGADA'
@@ -1544,8 +1681,8 @@ begin
     objMail.DireccionMail := q.FieldbyName('MailPropietario').AsString;
     objMail.idPlantilla := q.FieldbyName('PlantillaPropietario').AsInteger;
 
-    ImprimirReporte(Reporte, objMail, plReporte, gimpresion, '0', False, sMail);
-    ImprimirReporte(ReporteDuplicado, objMail, plreporte,gimpresion, '0', False, sMail);
+    ImprimirReporte(ReporteFijo, objMail, plReporte, gimpresion, '0', False, sMail);
+    ImprimirReporte(ReporteFDuplicado, objMail, plreporte,gimpresion, '0', False, sMail);
 
 
     if fConfirmacionRecibos = nil then

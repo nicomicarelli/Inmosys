@@ -77,7 +77,6 @@ object fABMVales: TfABMVales
       Style.BorderStyle = ebsNone
       TabOrder = 0
       Transparent = True
-      ExplicitTop = 373
       Height = 64
       Width = 1002
       object btnSalir: TAdvGlowButton

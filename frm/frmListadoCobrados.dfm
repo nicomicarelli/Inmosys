@@ -410,6 +410,452 @@ object fListadoCobrados: TfListadoCobrados
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    object gDetalle1: TStringAlignGrid
+      Left = 0
+      Top = 0
+      Width = 818
+      Height = 155
+      Align = alClient
+      ColCount = 10
+      DefaultRowHeight = 17
+      FixedCols = 0
+      RowCount = 20
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      Visible = False
+      OnDblClick = gDetalle1DblClick
+      ShowCellHints = False
+      ColWidths = (
+        64
+        312
+        103
+        103
+        103
+        103
+        100
+        -1
+        300
+        64)
+      Cells = (
+        0
+        0
+        'C'#243'digo'
+        1
+        0
+        'Inquilino'
+        2
+        0
+        'Alquileres'
+        3
+        0
+        'Impuestos'
+        4
+        0
+        'Otros'
+        5
+        0
+        'Total Neto'
+        6
+        0
+        'Punitorios'
+        7
+        0
+        'Total Deuda'
+        8
+        0
+        'Mail'
+        9
+        0
+        'DNI')
+      PropCell = (
+        0
+        0
+        1
+        2
+        0
+        1
+        0
+        1
+        2
+        3
+        1
+        0
+        2
+        0
+        1
+        2
+        3
+        1
+        0
+        3
+        0
+        1
+        2
+        0
+        4
+        0
+        1
+        2
+        0
+        4
+        1
+        1
+        0
+        0
+        5
+        0
+        1
+        2
+        0
+        6
+        0
+        1
+        2
+        0
+        7
+        0
+        1
+        0
+        0
+        8
+        0
+        1
+        2
+        0
+        9
+        0
+        1
+        2
+        0)
+      PropCol = (
+        0
+        3
+        1
+        0
+        1
+        1
+        1
+        3
+        1
+        0
+        2
+        1
+        0
+        3
+        1
+        0
+        3
+        1
+        0
+        0
+        4
+        1
+        0
+        0
+        5
+        1
+        0
+        4
+        9625305
+        0
+        6
+        -16777208
+        -11
+        'Tahoma'
+        0
+        609103873
+        0
+        6
+        1
+        0
+        0
+        7
+        1
+        0
+        0)
+      PropRow = ()
+      PropFixedCol = ()
+      PropFixedRow = ()
+    end
+    object gDeuda: TAdvStringGrid
+      Left = 0
+      Top = 0
+      Width = 818
+      Height = 155
+      Cursor = crDefault
+      Align = alClient
+      ColCount = 11
+      Ctl3D = True
+      DefaultRowHeight = 21
+      DrawingStyle = gdsClassic
+      FixedCols = 0
+      RowCount = 20
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing]
+      ParentCtl3D = False
+      PopupMenu = popOpciones
+      ScrollBars = ssBoth
+      TabOrder = 2
+      OnDblClick = gDeudaDblClick
+      GridLineColor = 15527152
+      GridFixedLineColor = 13947601
+      HoverRowCells = [hcNormal, hcSelected]
+      OnGetAlignment = gDeudaGetAlignment
+      ActiveCellFont.Charset = DEFAULT_CHARSET
+      ActiveCellFont.Color = clWindowText
+      ActiveCellFont.Height = -11
+      ActiveCellFont.Name = 'Tahoma'
+      ActiveCellFont.Style = [fsBold]
+      ActiveCellColor = 16644337
+      ActiveCellColorTo = 16576469
+      ColumnHeaders.Strings = (
+        ''
+        'Codigo'
+        'Inquilino'
+        'Alquileres'
+        'Impuestos'
+        'Otros'
+        'Total Neto'
+        'Punitorios'
+        'Total Deuda'
+        'Mail'
+        'DNI')
+      ControlLook.FixedGradientMirrorFrom = 16447735
+      ControlLook.FixedGradientMirrorTo = 16052977
+      ControlLook.FixedGradientHoverFrom = 16775139
+      ControlLook.FixedGradientHoverTo = 16775139
+      ControlLook.FixedGradientHoverMirrorFrom = 16772541
+      ControlLook.FixedGradientHoverMirrorTo = 16508855
+      ControlLook.FixedGradientDownFrom = 16377020
+      ControlLook.FixedGradientDownTo = 16377020
+      ControlLook.FixedGradientDownMirrorFrom = 16242317
+      ControlLook.FixedGradientDownMirrorTo = 16109962
+      ControlLook.FixedGradientDownBorder = 11440207
+      ControlLook.RadioAlwaysActive = True
+      ControlLook.DropDownHeader.Font.Charset = DEFAULT_CHARSET
+      ControlLook.DropDownHeader.Font.Color = clWindowText
+      ControlLook.DropDownHeader.Font.Height = -11
+      ControlLook.DropDownHeader.Font.Name = 'Tahoma'
+      ControlLook.DropDownHeader.Font.Style = []
+      ControlLook.DropDownHeader.Visible = True
+      ControlLook.DropDownHeader.Buttons = <>
+      ControlLook.DropDownFooter.Font.Charset = DEFAULT_CHARSET
+      ControlLook.DropDownFooter.Font.Color = clWindowText
+      ControlLook.DropDownFooter.Font.Height = -11
+      ControlLook.DropDownFooter.Font.Name = 'Tahoma'
+      ControlLook.DropDownFooter.Font.Style = []
+      ControlLook.DropDownFooter.Visible = True
+      ControlLook.DropDownFooter.Buttons = <>
+      DefaultAlignment = taCenter
+      Filter = <>
+      FilterActive = True
+      FilterDropDown.Font.Charset = DEFAULT_CHARSET
+      FilterDropDown.Font.Color = clWindowText
+      FilterDropDown.Font.Height = -11
+      FilterDropDown.Font.Name = 'Tahoma'
+      FilterDropDown.Font.Style = []
+      FilterDropDown.TextChecked = 'Checked'
+      FilterDropDown.TextUnChecked = 'Unchecked'
+      FilterDropDownClear = '(All)'
+      FilterEdit.TypeNames.Strings = (
+        'Starts with'
+        'Ends with'
+        'Contains'
+        'Not contains'
+        'Equal'
+        'Not equal'
+        'Clear')
+      FixedColWidth = 25
+      FixedFont.Charset = DEFAULT_CHARSET
+      FixedFont.Color = clWindowText
+      FixedFont.Height = -11
+      FixedFont.Name = 'Tahoma'
+      FixedFont.Style = []
+      FloatFormat = '%.2f'
+      HoverButtons.Buttons = <>
+      HoverButtons.Position = hbLeftFromColumnLeft
+      Look = glVista
+      PrintSettings.DateFormat = 'dd/mm/yyyy'
+      PrintSettings.Font.Charset = DEFAULT_CHARSET
+      PrintSettings.Font.Color = clWindowText
+      PrintSettings.Font.Height = -11
+      PrintSettings.Font.Name = 'Tahoma'
+      PrintSettings.Font.Style = []
+      PrintSettings.FixedFont.Charset = DEFAULT_CHARSET
+      PrintSettings.FixedFont.Color = clWindowText
+      PrintSettings.FixedFont.Height = -11
+      PrintSettings.FixedFont.Name = 'Tahoma'
+      PrintSettings.FixedFont.Style = []
+      PrintSettings.HeaderFont.Charset = DEFAULT_CHARSET
+      PrintSettings.HeaderFont.Color = clWindowText
+      PrintSettings.HeaderFont.Height = -11
+      PrintSettings.HeaderFont.Name = 'Tahoma'
+      PrintSettings.HeaderFont.Style = []
+      PrintSettings.FooterFont.Charset = DEFAULT_CHARSET
+      PrintSettings.FooterFont.Color = clWindowText
+      PrintSettings.FooterFont.Height = -11
+      PrintSettings.FooterFont.Name = 'Tahoma'
+      PrintSettings.FooterFont.Style = []
+      PrintSettings.PageNumSep = '/'
+      SearchFooter.AutoSearch = False
+      SearchFooter.ColorTo = 16052977
+      SearchFooter.FindNextCaption = '&Siguiente'
+      SearchFooter.FindPrevCaption = '&Anterior'
+      SearchFooter.Font.Charset = DEFAULT_CHARSET
+      SearchFooter.Font.Color = clWindowText
+      SearchFooter.Font.Height = -11
+      SearchFooter.Font.Name = 'Tahoma'
+      SearchFooter.Font.Style = []
+      SearchFooter.HighLightCaption = 'Resaltar'
+      SearchFooter.HintClose = 'Cerrar'
+      SearchFooter.HintFindNext = 'Encontrar Pr'#243'ximo'
+      SearchFooter.HintFindPrev = 'Encontrar anterior'
+      SearchFooter.HintHighlight = 'Resaltar ocurrencias'
+      SearchFooter.MatchCaseCaption = 'Coincidir May'#250'sculas y min'#250'sculas'
+      SearchFooter.SearchColumn = 1
+      ShowDesignHelper = False
+      SortSettings.DefaultFormat = ssAutomatic
+      SortSettings.HeaderColor = 16579058
+      SortSettings.HeaderColorTo = 16579058
+      SortSettings.HeaderMirrorColor = 16380385
+      SortSettings.HeaderMirrorColorTo = 16182488
+      Version = '7.4.6.3'
+      ExplicitLeft = 98
+      ExplicitTop = 59
+      ColWidths = (
+        25
+        49
+        230
+        108
+        68
+        66
+        60
+        56
+        100
+        98
+        64)
+      object cxGrid1: TcxGrid
+        Left = 3
+        Top = 116
+        Width = 1134
+        Height = 62
+        TabOrder = 4
+        Visible = False
+        object gDatos: TcxGridDBTableView
+          Navigator.Buttons.CustomButtons = <>
+          DataController.Summary.DefaultGroupSummaryItems = <>
+          DataController.Summary.FooterSummaryItems = <
+            item
+              Format = '$, 0.00'
+              Kind = skSum
+              FieldName = 'Monto'
+              Column = Columna_Cuenta
+              DisplayText = '$ 0.00'
+            end
+            item
+              Format = '$, 0.00'
+              FieldName = 'Pendiente'
+              Column = Columna_Vencimiento
+              DisplayText = '$ 0.00'
+            end>
+          DataController.Summary.SummaryGroups = <>
+          OptionsView.NoDataToDisplayInfoText = '<Sin datos a mostrar>'
+          OptionsView.Footer = True
+          OptionsView.GroupByBox = False
+          object Columna_Seleccionado: TcxGridDBColumn
+            Caption = 'Pagado'
+            PropertiesClassName = 'TcxCheckBoxProperties'
+            HeaderAlignmentHorz = taCenter
+            Width = 50
+          end
+          object Columna_Vale: TcxGridDBColumn
+            Caption = 'Vale'
+            PropertiesClassName = 'TcxCheckBoxProperties'
+            HeaderAlignmentHorz = taCenter
+            Width = 50
+          end
+          object Columna_Codigo: TcxGridDBColumn
+            Caption = 'C'#243'digo'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            Options.Editing = False
+            Options.Filtering = False
+            Options.GroupFooters = False
+            Options.Grouping = False
+            Options.Moving = False
+          end
+          object Columna_Nombre: TcxGridDBColumn
+            Caption = 'Nombre'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            Options.Editing = False
+            Options.Filtering = False
+            Options.GroupFooters = False
+            Options.Grouping = False
+            Options.Moving = False
+            Width = 254
+          end
+          object Columna_Cuenta: TcxGridDBColumn
+            Caption = 'Cuenta-Factura'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.Alignment.Horz = taRightJustify
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            Options.Editing = False
+            Width = 131
+          end
+          object Columna_Vencimiento: TcxGridDBColumn
+            Caption = 'Fecha Vto.'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.Alignment.Horz = taRightJustify
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            Options.Editing = False
+            Width = 70
+          end
+          object Columna_Importe: TcxGridDBColumn
+            Caption = 'Importe'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            MinWidth = 80
+            Options.Editing = False
+            Options.Filtering = False
+            Options.Grouping = False
+            Options.HorzSizing = False
+            Width = 80
+          end
+          object Columna_PorcentajeInquilino: TcxGridDBColumn
+            Caption = '% Inq,'
+            PropertiesClassName = 'TcxTextEditProperties'
+            Properties.ReadOnly = True
+            HeaderAlignmentHorz = taCenter
+            MinWidth = 64
+            Options.Editing = False
+            Options.Filtering = False
+            Options.Grouping = False
+            Options.HorzSizing = False
+          end
+          object Columna_PorcentajePropietario: TcxGridDBColumn
+            Caption = '% Prop.'
+          end
+          object Columna_ImporteInquilino: TcxGridDBColumn
+            Caption = 'Imp. Inquilino'
+            Width = 98
+          end
+          object Columna_ImportePropietario: TcxGridDBColumn
+            Caption = 'Imp. Propietario'
+            Width = 135
+          end
+        end
+        object cxGrid1Level1: TcxGridLevel
+          GridView = gDatos
+        end
+      end
+    end
     object cxGroupBox1: TcxGroupBox
       Left = 0
       Top = 184
@@ -689,441 +1135,6 @@ object fListadoCobrados: TfListadoCobrados
         Appearance.TextColorChecked = clWhite
         Appearance.TextColorDown = clWhite
         Appearance.TextColorHot = clWhite
-      end
-    end
-    object gDetalle1: TStringAlignGrid
-      Left = 0
-      Top = 0
-      Width = 818
-      Height = 155
-      Align = alClient
-      ColCount = 9
-      DefaultRowHeight = 17
-      FixedCols = 0
-      RowCount = 20
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-      Visible = False
-      OnDblClick = gDetalle1DblClick
-      ShowCellHints = False
-      ColWidths = (
-        64
-        312
-        103
-        103
-        103
-        103
-        -1
-        -1
-        300)
-      Cells = (
-        0
-        0
-        'C'#243'digo'
-        1
-        0
-        'Inquilino'
-        2
-        0
-        'Alquileres'
-        3
-        0
-        'Impuestos'
-        4
-        0
-        'Otros'
-        5
-        0
-        'Total Neto'
-        6
-        0
-        'Punitorios'
-        7
-        0
-        'Total Deuda'
-        8
-        0
-        'Mail')
-      PropCell = (
-        0
-        0
-        1
-        2
-        0
-        1
-        0
-        1
-        2
-        3
-        1
-        0
-        2
-        0
-        1
-        2
-        3
-        1
-        0
-        3
-        0
-        1
-        2
-        0
-        4
-        0
-        1
-        2
-        0
-        4
-        1
-        1
-        0
-        0
-        5
-        0
-        1
-        2
-        0
-        6
-        0
-        1
-        2
-        0
-        7
-        0
-        1
-        0
-        0
-        8
-        0
-        1
-        2
-        0)
-      PropCol = (
-        0
-        3
-        1
-        0
-        1
-        1
-        1
-        3
-        1
-        0
-        2
-        1
-        0
-        3
-        1
-        0
-        3
-        1
-        0
-        0
-        4
-        1
-        0
-        0
-        5
-        1
-        0
-        4
-        9625305
-        0
-        6
-        -16777208
-        -11
-        'Tahoma'
-        0
-        511598593
-        0
-        6
-        1
-        0
-        0
-        7
-        1
-        0
-        0)
-      PropRow = ()
-      PropFixedCol = ()
-      PropFixedRow = ()
-    end
-    object gDeuda: TAdvStringGrid
-      Left = 0
-      Top = 0
-      Width = 818
-      Height = 155
-      Cursor = crDefault
-      Align = alClient
-      ColCount = 10
-      Ctl3D = True
-      DefaultRowHeight = 21
-      DrawingStyle = gdsClassic
-      FixedCols = 0
-      RowCount = 20
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
-      ParentCtl3D = False
-      PopupMenu = popOpciones
-      ScrollBars = ssBoth
-      TabOrder = 2
-      OnDblClick = gDeudaDblClick
-      GridLineColor = 15527152
-      GridFixedLineColor = 13947601
-      HoverRowCells = [hcNormal, hcSelected]
-      OnGetAlignment = gDeudaGetAlignment
-      ActiveCellFont.Charset = DEFAULT_CHARSET
-      ActiveCellFont.Color = clWindowText
-      ActiveCellFont.Height = -11
-      ActiveCellFont.Name = 'Tahoma'
-      ActiveCellFont.Style = [fsBold]
-      ActiveCellColor = 16644337
-      ActiveCellColorTo = 16576469
-      ColumnHeaders.Strings = (
-        ''
-        'Codigo'
-        'Inquilino'
-        'Alquileres'
-        'Impuestos'
-        'Otros'
-        'Total Neto'
-        'Punitorios'
-        'Total Deuda'
-        'Mail')
-      ControlLook.FixedGradientMirrorFrom = 16447735
-      ControlLook.FixedGradientMirrorTo = 16052977
-      ControlLook.FixedGradientHoverFrom = 16775139
-      ControlLook.FixedGradientHoverTo = 16775139
-      ControlLook.FixedGradientHoverMirrorFrom = 16772541
-      ControlLook.FixedGradientHoverMirrorTo = 16508855
-      ControlLook.FixedGradientDownFrom = 16377020
-      ControlLook.FixedGradientDownTo = 16377020
-      ControlLook.FixedGradientDownMirrorFrom = 16242317
-      ControlLook.FixedGradientDownMirrorTo = 16109962
-      ControlLook.FixedGradientDownBorder = 11440207
-      ControlLook.RadioAlwaysActive = True
-      ControlLook.DropDownHeader.Font.Charset = DEFAULT_CHARSET
-      ControlLook.DropDownHeader.Font.Color = clWindowText
-      ControlLook.DropDownHeader.Font.Height = -11
-      ControlLook.DropDownHeader.Font.Name = 'Tahoma'
-      ControlLook.DropDownHeader.Font.Style = []
-      ControlLook.DropDownHeader.Visible = True
-      ControlLook.DropDownHeader.Buttons = <>
-      ControlLook.DropDownFooter.Font.Charset = DEFAULT_CHARSET
-      ControlLook.DropDownFooter.Font.Color = clWindowText
-      ControlLook.DropDownFooter.Font.Height = -11
-      ControlLook.DropDownFooter.Font.Name = 'Tahoma'
-      ControlLook.DropDownFooter.Font.Style = []
-      ControlLook.DropDownFooter.Visible = True
-      ControlLook.DropDownFooter.Buttons = <>
-      DefaultAlignment = taCenter
-      Filter = <>
-      FilterActive = True
-      FilterDropDown.Font.Charset = DEFAULT_CHARSET
-      FilterDropDown.Font.Color = clWindowText
-      FilterDropDown.Font.Height = -11
-      FilterDropDown.Font.Name = 'Tahoma'
-      FilterDropDown.Font.Style = []
-      FilterDropDown.TextChecked = 'Checked'
-      FilterDropDown.TextUnChecked = 'Unchecked'
-      FilterDropDownClear = '(All)'
-      FilterEdit.TypeNames.Strings = (
-        'Starts with'
-        'Ends with'
-        'Contains'
-        'Not contains'
-        'Equal'
-        'Not equal'
-        'Clear')
-      FixedColWidth = 25
-      FixedFont.Charset = DEFAULT_CHARSET
-      FixedFont.Color = clWindowText
-      FixedFont.Height = -11
-      FixedFont.Name = 'Tahoma'
-      FixedFont.Style = []
-      FloatFormat = '%.2f'
-      HoverButtons.Buttons = <>
-      HoverButtons.Position = hbLeftFromColumnLeft
-      Look = glVista
-      PrintSettings.DateFormat = 'dd/mm/yyyy'
-      PrintSettings.Font.Charset = DEFAULT_CHARSET
-      PrintSettings.Font.Color = clWindowText
-      PrintSettings.Font.Height = -11
-      PrintSettings.Font.Name = 'Tahoma'
-      PrintSettings.Font.Style = []
-      PrintSettings.FixedFont.Charset = DEFAULT_CHARSET
-      PrintSettings.FixedFont.Color = clWindowText
-      PrintSettings.FixedFont.Height = -11
-      PrintSettings.FixedFont.Name = 'Tahoma'
-      PrintSettings.FixedFont.Style = []
-      PrintSettings.HeaderFont.Charset = DEFAULT_CHARSET
-      PrintSettings.HeaderFont.Color = clWindowText
-      PrintSettings.HeaderFont.Height = -11
-      PrintSettings.HeaderFont.Name = 'Tahoma'
-      PrintSettings.HeaderFont.Style = []
-      PrintSettings.FooterFont.Charset = DEFAULT_CHARSET
-      PrintSettings.FooterFont.Color = clWindowText
-      PrintSettings.FooterFont.Height = -11
-      PrintSettings.FooterFont.Name = 'Tahoma'
-      PrintSettings.FooterFont.Style = []
-      PrintSettings.PageNumSep = '/'
-      SearchFooter.AutoSearch = False
-      SearchFooter.ColorTo = 16052977
-      SearchFooter.FindNextCaption = '&Siguiente'
-      SearchFooter.FindPrevCaption = '&Anterior'
-      SearchFooter.Font.Charset = DEFAULT_CHARSET
-      SearchFooter.Font.Color = clWindowText
-      SearchFooter.Font.Height = -11
-      SearchFooter.Font.Name = 'Tahoma'
-      SearchFooter.Font.Style = []
-      SearchFooter.HighLightCaption = 'Resaltar'
-      SearchFooter.HintClose = 'Cerrar'
-      SearchFooter.HintFindNext = 'Encontrar Pr'#243'ximo'
-      SearchFooter.HintFindPrev = 'Encontrar anterior'
-      SearchFooter.HintHighlight = 'Resaltar ocurrencias'
-      SearchFooter.MatchCaseCaption = 'Coincidir May'#250'sculas y min'#250'sculas'
-      SearchFooter.SearchColumn = 1
-      ShowDesignHelper = False
-      SortSettings.DefaultFormat = ssAutomatic
-      SortSettings.HeaderColor = 16579058
-      SortSettings.HeaderColorTo = 16579058
-      SortSettings.HeaderMirrorColor = 16380385
-      SortSettings.HeaderMirrorColorTo = 16182488
-      Version = '7.4.6.3'
-      ExplicitTop = 8
-      ExplicitHeight = 184
-      ColWidths = (
-        25
-        49
-        230
-        108
-        68
-        66
-        60
-        56
-        100
-        98)
-      object cxGrid1: TcxGrid
-        Left = 3
-        Top = 116
-        Width = 1134
-        Height = 62
-        TabOrder = 4
-        Visible = False
-        object gDatos: TcxGridDBTableView
-          Navigator.Buttons.CustomButtons = <>
-          DataController.Summary.DefaultGroupSummaryItems = <>
-          DataController.Summary.FooterSummaryItems = <
-            item
-              Format = '$, 0.00'
-              Kind = skSum
-              FieldName = 'Monto'
-              Column = Columna_Cuenta
-              DisplayText = '$ 0.00'
-            end
-            item
-              Format = '$, 0.00'
-              FieldName = 'Pendiente'
-              Column = Columna_Vencimiento
-              DisplayText = '$ 0.00'
-            end>
-          DataController.Summary.SummaryGroups = <>
-          OptionsView.NoDataToDisplayInfoText = '<Sin datos a mostrar>'
-          OptionsView.Footer = True
-          OptionsView.GroupByBox = False
-          object Columna_Seleccionado: TcxGridDBColumn
-            Caption = 'Pagado'
-            PropertiesClassName = 'TcxCheckBoxProperties'
-            HeaderAlignmentHorz = taCenter
-            Width = 50
-          end
-          object Columna_Vale: TcxGridDBColumn
-            Caption = 'Vale'
-            PropertiesClassName = 'TcxCheckBoxProperties'
-            HeaderAlignmentHorz = taCenter
-            Width = 50
-          end
-          object Columna_Codigo: TcxGridDBColumn
-            Caption = 'C'#243'digo'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            Options.Editing = False
-            Options.Filtering = False
-            Options.GroupFooters = False
-            Options.Grouping = False
-            Options.Moving = False
-          end
-          object Columna_Nombre: TcxGridDBColumn
-            Caption = 'Nombre'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            Options.Editing = False
-            Options.Filtering = False
-            Options.GroupFooters = False
-            Options.Grouping = False
-            Options.Moving = False
-            Width = 254
-          end
-          object Columna_Cuenta: TcxGridDBColumn
-            Caption = 'Cuenta-Factura'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.Alignment.Horz = taRightJustify
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            Options.Editing = False
-            Width = 131
-          end
-          object Columna_Vencimiento: TcxGridDBColumn
-            Caption = 'Fecha Vto.'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.Alignment.Horz = taRightJustify
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            Options.Editing = False
-            Width = 70
-          end
-          object Columna_Importe: TcxGridDBColumn
-            Caption = 'Importe'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            MinWidth = 80
-            Options.Editing = False
-            Options.Filtering = False
-            Options.Grouping = False
-            Options.HorzSizing = False
-            Width = 80
-          end
-          object Columna_PorcentajeInquilino: TcxGridDBColumn
-            Caption = '% Inq,'
-            PropertiesClassName = 'TcxTextEditProperties'
-            Properties.ReadOnly = True
-            HeaderAlignmentHorz = taCenter
-            MinWidth = 64
-            Options.Editing = False
-            Options.Filtering = False
-            Options.Grouping = False
-            Options.HorzSizing = False
-          end
-          object Columna_PorcentajePropietario: TcxGridDBColumn
-            Caption = '% Prop.'
-          end
-          object Columna_ImporteInquilino: TcxGridDBColumn
-            Caption = 'Imp. Inquilino'
-            Width = 98
-          end
-          object Columna_ImportePropietario: TcxGridDBColumn
-            Caption = 'Imp. Propietario'
-            Width = 135
-          end
-        end
-        object cxGrid1Level1: TcxGridLevel
-          GridView = gDatos
-        end
       end
     end
     object PanelMails: TPanel
@@ -1653,6 +1664,7 @@ object fListadoCobrados: TfListadoCobrados
     PassSetting = psTwoPass
     PrinterSetup.BinName = 'Default'
     PrinterSetup.DocumentName = 'Listado de Inmuebles'
+    PrinterSetup.Orientation = poLandscape
     PrinterSetup.PaperName = 'A4'
     PrinterSetup.PrinterName = 'Default'
     PrinterSetup.SaveDeviceSettings = False
@@ -1660,8 +1672,8 @@ object fListadoCobrados: TfListadoCobrados
     PrinterSetup.mmMarginLeft = 6350
     PrinterSetup.mmMarginRight = 6350
     PrinterSetup.mmMarginTop = 6350
-    PrinterSetup.mmPaperHeight = 297000
-    PrinterSetup.mmPaperWidth = 210000
+    PrinterSetup.mmPaperHeight = 210000
+    PrinterSetup.mmPaperWidth = 297000
     PrinterSetup.PaperSize = 9
     Template.FileName = 
       'S:\Plantillas\PedidosPendientes\Pedidos_Pendientes\Pedidos_Pendi' +
@@ -1708,174 +1720,14 @@ object fListadoCobrados: TfListadoCobrados
     object ppTitleBand2: TppTitleBand
       Background.Brush.Style = bsClear
       mmBottomOffset = 0
-      mmHeight = 52388
+      mmHeight = 0
       mmPrintPosition = 0
-      object ppLabel7: TppLabel
-        DesignLayer = ppDesignLayer2
-        UserName = 'Label1'
-        AutoSize = False
-        Caption = 'Listado de Inquilinos que adeudan'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 24
-        Font.Style = [fsBold]
-        FormField = False
-        TextAlignment = taCentered
-        Transparent = True
-        mmHeight = 9525
-        mmLeft = 22490
-        mmTop = 17198
-        mmWidth = 150813
-        BandType = 1
-        LayerName = Foreground1
-      end
-      object ppLabel9: TppLabel
-        DesignLayer = ppDesignLayer2
-        UserName = 'Label10'
-        Caption = 'Inquilino:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 10
-        Font.Style = [fsBold]
-        FormField = False
-        Transparent = True
-        mmHeight = 4233
-        mmLeft = 1588
-        mmTop = 39423
-        mmWidth = 14986
-        BandType = 1
-        LayerName = Foreground1
-      end
-      object ppLabel12: TppLabel
-        DesignLayer = ppDesignLayer2
-        UserName = 'Label11'
-        Caption = 'Mes:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 10
-        Font.Style = [fsBold]
-        FormField = False
-        Transparent = True
-        mmHeight = 4233
-        mmLeft = 1588
-        mmTop = 44450
-        mmWidth = 7535
-        BandType = 1
-        LayerName = Foreground1
-      end
-      object ppLabel13: TppLabel
-        DesignLayer = ppDesignLayer2
-        UserName = 'Label41'
-        Caption = 'Filtrado por:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'Arial'
-        Font.Size = 10
-        Font.Style = [fsBold]
-        FormField = False
-        Transparent = True
-        mmHeight = 4233
-        mmLeft = 1588
-        mmTop = 32279
-        mmWidth = 20638
-        BandType = 1
-        LayerName = Foreground1
-      end
-      object ppRegion1: TppRegion
-        DesignLayer = ppDesignLayer2
-        UserName = 'Region'
-        Pen.Style = psClear
-        mmHeight = 7673
-        mmLeft = 794
-        mmTop = 2117
-        mmWidth = 196058
-        BandType = 1
-        LayerName = Foreground1
-        mmBottomOffset = 0
-        mmOverFlowOffset = 0
-        mmStopPosition = 0
-        mmMinHeight = 0
-        object ppLabel14: TppLabel
-          DesignLayer = ppDesignLayer2
-          UserName = 'Label8'
-          AutoSize = False
-          Caption = 'SALOMON INMOBILIARIA'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Name = 'TIMES NEW ROMAN'
-          Font.Size = -18
-          Font.Style = [fsBold]
-          FormField = False
-          Transparent = True
-          mmHeight = 6615
-          mmLeft = 3175
-          mmTop = 3175
-          mmWidth = 150813
-          BandType = 1
-          LayerName = Foreground1
-        end
-      end
-      object ppDBText6: TppDBText
-        DesignLayer = ppDesignLayer2
-        UserName = 'DBText10'
-        DataField = 'Filtro por Inquilino'
-        DataPipeline = Titulo
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 10
-        Font.Style = []
-        ParentDataPipeline = False
-        Transparent = True
-        DataPipelineName = 'Titulo'
-        mmHeight = 4233
-        mmLeft = 22490
-        mmTop = 39423
-        mmWidth = 121709
-        BandType = 1
-        LayerName = Foreground1
-      end
-      object ppDBText7: TppDBText
-        DesignLayer = ppDesignLayer2
-        UserName = 'DBText11'
-        DataField = 'Filtro por mes'
-        DataPipeline = Titulo
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 10
-        Font.Style = []
-        ParentDataPipeline = False
-        Transparent = True
-        DataPipelineName = 'Titulo'
-        mmHeight = 4233
-        mmLeft = 22490
-        mmTop = 44450
-        mmWidth = 121709
-        BandType = 1
-        LayerName = Foreground1
-      end
     end
     object ppHeaderBand2: TppHeaderBand
       Background.Brush.Style = bsClear
       mmBottomOffset = 0
       mmHeight = 6615
       mmPrintPosition = 0
-      object ppLine4: TppLine
-        DesignLayer = ppDesignLayer2
-        UserName = 'Line1'
-        Pen.Width = 2
-        Weight = 1.500000000000000000
-        mmHeight = 3969
-        mmLeft = 9790
-        mmTop = 4763
-        mmWidth = 196058
-        BandType = 0
-        LayerName = Foreground1
-      end
       object ppLabel15: TppLabel
         DesignLayer = ppDesignLayer2
         UserName = 'Label2'
@@ -1890,8 +1742,8 @@ object fListadoCobrados: TfListadoCobrados
         Transparent = True
         mmHeight = 4233
         mmLeft = 27517
-        mmTop = 1058
-        mmWidth = 69850
+        mmTop = 1060
+        mmWidth = 67733
         BandType = 0
         LayerName = Foreground1
       end
@@ -1909,20 +1761,8 @@ object fListadoCobrados: TfListadoCobrados
         Transparent = True
         mmHeight = 4233
         mmLeft = 1588
-        mmTop = 1058
+        mmTop = 1060
         mmWidth = 24342
-        BandType = 0
-        LayerName = Foreground1
-      end
-      object ppLine5: TppLine
-        DesignLayer = ppDesignLayer2
-        UserName = 'Line3'
-        Pen.Width = 2
-        Weight = 1.500000000000000000
-        mmHeight = 1058
-        mmLeft = 1323
-        mmTop = 529
-        mmWidth = 279665
         BandType = 0
         LayerName = Foreground1
       end
@@ -1939,8 +1779,8 @@ object fListadoCobrados: TfListadoCobrados
         FormField = False
         Transparent = True
         mmHeight = 4233
-        mmLeft = 110067
-        mmTop = 529
+        mmLeft = 125942
+        mmTop = 1058
         mmWidth = 19844
         BandType = 0
         LayerName = Foreground1
@@ -1958,8 +1798,8 @@ object fListadoCobrados: TfListadoCobrados
         FormField = False
         Transparent = True
         mmHeight = 4233
-        mmLeft = 132027
-        mmTop = 529
+        mmLeft = 147902
+        mmTop = 1058
         mmWidth = 19844
         BandType = 0
         LayerName = Foreground1
@@ -1977,8 +1817,8 @@ object fListadoCobrados: TfListadoCobrados
         FormField = False
         Transparent = True
         mmHeight = 4233
-        mmLeft = 153459
-        mmTop = 529
+        mmLeft = 169334
+        mmTop = 1058
         mmWidth = 19844
         BandType = 0
         LayerName = Foreground1
@@ -1996,8 +1836,46 @@ object fListadoCobrados: TfListadoCobrados
         FormField = False
         Transparent = True
         mmHeight = 4233
-        mmLeft = 175155
-        mmTop = 794
+        mmLeft = 215900
+        mmTop = 1058
+        mmWidth = 19844
+        BandType = 0
+        LayerName = Foreground1
+      end
+      object ppLabel6: TppLabel
+        DesignLayer = ppDesignLayer2
+        UserName = 'Label6'
+        AutoSize = False
+        Caption = 'Punitorios'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'TIMES NEW ROMAN'
+        Font.Size = 10
+        Font.Style = [fsBold]
+        FormField = False
+        Transparent = True
+        mmHeight = 4233
+        mmLeft = 190500
+        mmTop = 1058
+        mmWidth = 19844
+        BandType = 0
+        LayerName = Foreground1
+      end
+      object ppLabel7: TppLabel
+        DesignLayer = ppDesignLayer2
+        UserName = 'Label7'
+        AutoSize = False
+        Caption = 'DNI'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'TIMES NEW ROMAN'
+        Font.Size = 10
+        Font.Style = [fsBold]
+        FormField = False
+        Transparent = True
+        mmHeight = 4233
+        mmLeft = 97367
+        mmTop = 1058
         mmWidth = 19844
         BandType = 0
         LayerName = Foreground1
@@ -2024,7 +1902,7 @@ object fListadoCobrados: TfListadoCobrados
         mmHeight = 3440
         mmLeft = 27517
         mmTop = 0
-        mmWidth = 69850
+        mmWidth = 67733
         BandType = 4
         LayerName = Foreground1
       end
@@ -2060,8 +1938,8 @@ object fListadoCobrados: TfListadoCobrados
         TextAlignment = taRightJustified
         Transparent = True
         DataPipelineName = 'plreporte1'
-        mmHeight = 3344
-        mmLeft = 110067
+        mmHeight = 3440
+        mmLeft = 125677
         mmTop = 0
         mmWidth = 19844
         BandType = 4
@@ -2080,8 +1958,8 @@ object fListadoCobrados: TfListadoCobrados
         TextAlignment = taRightJustified
         Transparent = True
         DataPipelineName = 'plreporte1'
-        mmHeight = 3344
-        mmLeft = 132027
+        mmHeight = 3440
+        mmLeft = 147902
         mmTop = 0
         mmWidth = 19844
         BandType = 4
@@ -2090,27 +1968,7 @@ object fListadoCobrados: TfListadoCobrados
       object ppDBText13: TppDBText
         DesignLayer = ppDesignLayer2
         UserName = 'DBText13'
-        DataField = 'Otros'
-        DataPipeline = plreporte1
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 8
-        Font.Style = []
-        TextAlignment = taRightJustified
-        Transparent = True
-        DataPipelineName = 'plreporte1'
-        mmHeight = 3344
-        mmLeft = 153988
-        mmTop = 0
-        mmWidth = 19844
-        BandType = 4
-        LayerName = Foreground1
-      end
-      object ppDBText15: TppDBText
-        DesignLayer = ppDesignLayer2
-        UserName = 'DBText15'
-        DataField = 'Total'
+        DataField = 'Punitorios'
         DataPipeline = plreporte1
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
@@ -2121,52 +1979,17 @@ object fListadoCobrados: TfListadoCobrados
         Transparent = True
         DataPipelineName = 'plreporte1'
         mmHeight = 3440
-        mmLeft = 175684
+        mmLeft = 190500
         mmTop = 0
         mmWidth = 19844
         BandType = 4
         LayerName = Foreground1
       end
-    end
-    object ppFooterBand2: TppFooterBand
-      Background.Brush.Style = bsClear
-      mmBottomOffset = 0
-      mmHeight = 8996
-      mmPrintPosition = 0
-      object ppLine6: TppLine
+      object ppDBText15: TppDBText
         DesignLayer = ppDesignLayer2
-        UserName = 'Line2'
-        Pen.Color = clGray
-        Weight = 0.750000000000000000
-        mmHeight = 1323
-        mmLeft = 1323
-        mmTop = 7673
-        mmWidth = 196058
-        BandType = 8
-        LayerName = Foreground1
-      end
-      object ppSystemVariable3: TppSystemVariable
-        DesignLayer = ppDesignLayer2
-        UserName = 'SystemVariable1'
-        VarType = vtPrintDateTime
-        DisplayFormat = 'dd/mm/yyyy'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Name = 'TIMES NEW ROMAN'
-        Font.Size = 8
-        Font.Style = []
-        Transparent = True
-        mmHeight = 3704
-        mmLeft = 1323
-        mmTop = 3175
-        mmWidth = 14288
-        BandType = 8
-        LayerName = Foreground1
-      end
-      object ppSystemVariable4: TppSystemVariable
-        DesignLayer = ppDesignLayer2
-        UserName = 'SystemVariable2'
-        VarType = vtPageSetDesc
+        UserName = 'DBText15'
+        DataField = 'Total Deuda'
+        DataPipeline = plreporte1
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Name = 'TIMES NEW ROMAN'
@@ -2174,11 +1997,52 @@ object fListadoCobrados: TfListadoCobrados
         Font.Style = []
         TextAlignment = taRightJustified
         Transparent = True
-        mmHeight = 3704
-        mmLeft = 264584
-        mmTop = 3175
-        mmWidth = 16404
-        BandType = 8
+        DataPipelineName = 'plreporte1'
+        mmHeight = 3440
+        mmLeft = 215900
+        mmTop = 0
+        mmWidth = 19844
+        BandType = 4
+        LayerName = Foreground1
+      end
+      object ppDBText3: TppDBText
+        DesignLayer = ppDesignLayer2
+        UserName = 'DBText3'
+        DataField = 'Otros'
+        DataPipeline = plreporte1
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'TIMES NEW ROMAN'
+        Font.Size = 8
+        Font.Style = []
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'plreporte1'
+        mmHeight = 3440
+        mmLeft = 171450
+        mmTop = 0
+        mmWidth = 19844
+        BandType = 4
+        LayerName = Foreground1
+      end
+      object ppDBText6: TppDBText
+        DesignLayer = ppDesignLayer2
+        UserName = 'DBText6'
+        DataField = 'DNI'
+        DataPipeline = plreporte1
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'TIMES NEW ROMAN'
+        Font.Size = 8
+        Font.Style = []
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'plreporte1'
+        mmHeight = 3440
+        mmLeft = 97367
+        mmTop = 0
+        mmWidth = 19844
+        BandType = 4
         LayerName = Foreground1
       end
     end
@@ -2234,11 +2098,25 @@ object fListadoCobrados: TfListadoCobrados
       Position = 4
     end
     object plreporte1ppField4: TppField
-      FieldAlias = 'Total'
-      FieldName = 'Total'
+      FieldAlias = 'Total Deuda'
+      FieldName = 'Total Deuda'
       FieldLength = 10
       DisplayWidth = 10
       Position = 5
+    end
+    object plreporte1ppField5: TppField
+      FieldAlias = 'Punitorios'
+      FieldName = 'Punitorios'
+      FieldLength = 10
+      DisplayWidth = 10
+      Position = 6
+    end
+    object plreporte1ppField6: TppField
+      FieldAlias = 'DNI'
+      FieldName = 'DNI'
+      FieldLength = 10
+      DisplayWidth = 10
+      Position = 7
     end
   end
   object popOpciones: TPopupMenu

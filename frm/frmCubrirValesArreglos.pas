@@ -112,6 +112,7 @@ type
     { Private declarations }
   public
     FSoloPendientes : Boolean;
+    boVieneDeHilo: Boolean;
     { Public declarations }
   end;
 
@@ -365,8 +366,11 @@ begin
         end;
       end;
       DM.ConfirmarTransaccion;
-      MostrarDialogoAceptar( 'Datos grabados correctamente.');
-      ActualizarClick(nil);
+      if not boVieneDeHilo then
+      begin
+        MostrarDialogoAceptar( 'Datos grabados correctamente.');
+        ActualizarClick(nil);
+      end;
     except
       DM.CancelarTransaccion;
     end;
@@ -530,6 +534,7 @@ end;
 procedure TfCubrirValesArreglos.FormCreate(Sender: TObject);
 begin
   fPrincipal.Center(Self);
+  boVieneDeHilo := False;
 end;
 
 procedure TfCubrirValesArreglos.gDetalleDblClick(Sender: TObject);

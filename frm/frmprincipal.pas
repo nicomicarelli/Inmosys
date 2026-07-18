@@ -206,7 +206,7 @@ type
     Action3: TAction;
     actVerBackups: TAction;
     actLecturaIA: TAction;
-    actListadoDeuda: TAction;
+    actListadoDeudabot: TAction;
     actSoloInformativos: TAction;
     procedure botonsalirClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -344,7 +344,7 @@ type
     procedure Action3Execute(Sender: TObject);
     procedure actVerBackupsExecute(Sender: TObject);
     procedure actLecturaIAExecute(Sender: TObject);
-    procedure actListadoDeudaExecute(Sender: TObject);
+    procedure actListadoDeudabotExecute(Sender: TObject);
     procedure actSoloInformativosExecute(Sender: TObject);
   private
   public
@@ -675,7 +675,6 @@ var
   Accion: TActionClientItem;
   Consorcio: TAction;
   q: TFXQuery;
-
 begin
   if TFrmClave.Ejecutar then
   begin
@@ -734,6 +733,20 @@ end;
 procedure TfPrincipal.ListView1DblClick(Sender: TObject);
 begin
 (*
+  procedure prAutomatizarValesDesfazados;
+  begin
+    if fInformeImpuestosPagados = nil then
+      Application.CreateForm(TfInformeImpuestosPagados, fInformeImpuestosPagados)
+    else
+      fInformeImpuestosPagados.Show;
+    fInformeImpuestosPagados.Caption := 'En Vale No Automatizado';
+    fInformeImpuestosPagados.TipoInforme := tiValeNoAutomatizado;
+    fInformeImpuestosPagados.gDetalle.ColCount := 6;
+    fInformeImpuestosPagados.gDetalle.PopupMenu := fInformeImpuestosPagados.popOpciones;
+    fInformeImpuestosPagados.edEmpresa.ItemIndex := 0;
+    fInformeImpuestosPagados.ActualizarClick(nil);
+  end;
+
   case listview1.ItemIndex of
     0:  TFrmListConceptos.Ejecutar;
     1:  TFrmInmuebles.Ejecutar;
@@ -2028,7 +2041,7 @@ begin
 
 end;
 
-procedure TfPrincipal.actListadoDeudaExecute(Sender: TObject);
+procedure TfPrincipal.actListadoDeudabotExecute(Sender: TObject);
 begin
   if fListadoDeudaBot = nil then
     Application.CreateForm(TfListadoCobrados, fListadoDeudaBot)

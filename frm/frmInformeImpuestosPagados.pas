@@ -1112,8 +1112,10 @@ var
   descripcion: String;
   I: Integer;
   Estado: Boolean;
-
+  Dia: Integer;
+  Fecha: String;
 begin
+  Dia:=StrtoInt(FormatDatetime('dd', Date));
   if TipoInforme = tiValeNoAutomatizado then
   begin
     for I := 1 to gDetalle.RowCount -1 do
@@ -1126,9 +1128,14 @@ begin
           begin
             if gDetalle.Cells[3, I] = '27' then
             begin
+              if Dia > 15 then
+                Fecha:= FormatDatetime('YYYYMM',IncMonth(date)) + '10'
+              else
+                Fecha:= FormatDatetime('YYYYMM',date) + '10';
+
               descripcion := 'IMPUESTOS A DESCONTAR';
               InsertarItemautom(gDetalle.Cells[1, I],
-                              FormatDatetime('YYYYMM',date) + '10',
+                              Fecha,
                               Descripcion,
                               Copy(gDetalle.Cells[4, I], 23, 50),
                               AnsiReplaceStr(AnsiReplaceStr(gDetalle.Cells[5,I], '.', ''), ',','.'),
@@ -1139,9 +1146,14 @@ begin
 
             if gDetalle.Cells[3, I] = '09' then
             begin
+              if Dia > 15 then
+                Fecha:= FormatDatetime('YYYYMM',IncMonth(date)) + '05'
+              else
+                Fecha:= FormatDatetime('YYYYMM',date) + '05';
+
               descripcion := 'IMP Y/O SERVICIOS';
               InsertarItemautom(gDetalle.Cells[1, I],
-                              FormatDatetime('YYYYMM',date) + '05',
+                              Fecha,
                               Descripcion,
                               Copy(gDetalle.Cells[4, I], 19, 50),
                               AnsiReplaceStr(AnsiReplaceStr(gDetalle.Cells[5,I], '.', ''), ',','.'),
@@ -1170,9 +1182,14 @@ begin
           begin
             if gDetalle.Cells[3, I] = '27' then
             begin
+              if Dia > 15 then
+                Fecha:= FormatDatetime('YYYYMM',IncMonth(date)) + '10'
+              else
+                Fecha:= FormatDatetime('YYYYMM',date) + '10';
+
               descripcion := 'IMPUESTOS A DESCONTAR';
               InsertarItemautom(gDetalle.Cells[1, I],
-                              FormatDatetime('YYYYMM',date) + '10',
+                              Fecha,
                               Descripcion,
                               Copy(gDetalle.Cells[4, I], 23, 50),
                               AnsiReplaceStr(AnsiReplaceStr(gDetalle.Cells[5,I], '.', ''), ',','.'),
@@ -1183,9 +1200,13 @@ begin
 
             if gDetalle.Cells[3, I] = '09' then
             begin
+              if Dia > 15 then
+                Fecha:= FormatDatetime('YYYYMM',IncMonth(date)) + '05'
+              else
+                Fecha:= FormatDatetime('YYYYMM',date) + '05';
               descripcion := 'IMP Y/O SERVICIOS';
               InsertarItemautom(gDetalle.Cells[1, I],
-                              FormatDatetime('YYYYMM',date) + '05',
+                              Fecha,
                               Descripcion,
                               Copy(gDetalle.Cells[4, I], 19, 50),
                               AnsiReplaceStr(AnsiReplaceStr(gDetalle.Cells[5,I], '.', ''), ',','.'),

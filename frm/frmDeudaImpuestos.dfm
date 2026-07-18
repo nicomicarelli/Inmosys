@@ -18,9 +18,9 @@ object fDeudaImpuestos: TfDeudaImpuestos
   TextHeight = 13
   object gDetalle: TStringAlignGrid
     Left = 0
-    Top = 41
+    Top = 25
     Width = 654
-    Height = 145
+    Height = 161
     Align = alClient
     ColCount = 3
     DefaultRowHeight = 17
@@ -32,8 +32,8 @@ object fDeudaImpuestos: TfDeudaImpuestos
     TabOrder = 0
     ShowCellHints = False
     DrawSelection = False
-    ExplicitTop = 0
-    ExplicitHeight = 149
+    ExplicitTop = 41
+    ExplicitHeight = 145
     ColWidths = (
       100
       410
@@ -77,23 +77,18 @@ object fDeudaImpuestos: TfDeudaImpuestos
     Left = 0
     Top = 0
     Width = 654
-    Height = 41
+    Height = 25
     Align = alTop
     BevelOuter = bvNone
     Color = 15132390
     ParentBackground = False
     TabOrder = 1
-    ExplicitLeft = 264
-    ExplicitTop = 8
-    ExplicitWidth = 185
     object Label1: TLabel
       Left = 8
       Top = 2
-      Width = 597
+      Width = 577
       Height = 38
-      Caption = 
-        'Tild'#243' "Se desocupa" y el inquilino presenta deuda de impuestos e' +
-        'n vales. Verifique!!'
+      Caption = 'El inquilino presenta deuda de impuestos en vales. Verifique!!'
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
@@ -115,7 +110,6 @@ object fDeudaImpuestos: TfDeudaImpuestos
     Color = 15132390
     ParentBackground = False
     TabOrder = 2
-    ExplicitTop = 187
     object Label2: TLabel
       Left = 473
       Top = 4

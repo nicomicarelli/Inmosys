@@ -99,11 +99,24 @@ var
   Meses: Integer;
   Periodo: Integer;
   Fecha: TDatetime;
+  boConserva: Boolean;
+  Fila: INteger;
 begin
-  if MostrarDialogoSiNo('ATENCION!!'+#13#10+'En caso de continuar, se perderan los datos cargados en la grilla.' + #13#10 + '¿Desea continuar?') then
-  begin
+  boConserva := False;
+  if MostrarDialogoSiNo('ATENCION!!'+#13#10+'¿Desea conservar los datos cargados en la grilla y generar un nuevo contrato a continuacion?') then
+    boConserva := True;
+
+  if not boConserva then
     gDetalle.Vaciar;
-    gDetalle.RowCount := 50;
+
+    for I := 1 to gDetalle.RowCount -1 do
+      if gDetalle.Cells[0, I] = '' then
+      begin
+        Fila := I;
+        Break;
+      end;
+
+    gDetalle.RowCount := 1000;
     Meses := ToInt(edit5.Text);
     case cbPeriodo.ItemIndex of
       0: begin
@@ -135,12 +148,12 @@ begin
 
     for I := 1 to Meses do
     begin
-      gDetalle.Cells[0, I] := FormatDatetime('dd/mm/yyyy', Fecha);
+      gDetalle.Cells[0, Fila] := FormatDatetime('dd/mm/yyyy', Fecha);
       Fecha := INcMonth(Fecha, Periodo);
-      gDetalle.Cells[1, I] := FormatDatetime('dd/mm/yyyy', Fecha - 1);
-      gDetalle.Cells[2, I] := '0.01';
+      gDetalle.Cells[1, Fila] := FormatDatetime('dd/mm/yyyy', Fecha - 1);
+      gDetalle.Cells[2, Fila] := '0.01';
+      Inc(Fila);
     end;
-  end;
 end;
 
 procedure TfrmContratos.btnSalirClick(Sender: TObject);

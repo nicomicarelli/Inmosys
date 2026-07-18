@@ -134,7 +134,7 @@ object frecrinmvta: Tfrecrinmvta
     ParentColor = True
     TabOrder = 8
     object btnImprimir: TAdvGlowButton
-      Left = 1
+      Left = 0
       Top = 0
       Width = 90
       Height = 29
@@ -390,6 +390,20 @@ object frecrinmvta: Tfrecrinmvta
       FieldLength = 10
       DisplayWidth = 10
       Position = 7
+    end
+    object plDatosppField5: TppField
+      FieldAlias = 'Texto'
+      FieldName = 'Texto'
+      FieldLength = 10
+      DisplayWidth = 10
+      Position = 8
+    end
+    object plDatosppField10: TppField
+      FieldAlias = 'Numero'
+      FieldName = 'Numero'
+      FieldLength = 10
+      DisplayWidth = 10
+      Position = 9
     end
   end
   object Reporte: TppReport

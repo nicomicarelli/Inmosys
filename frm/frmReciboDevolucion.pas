@@ -8,7 +8,7 @@ uses
   Funciones, ImgList, ComCtrls, ToolWin, sqlExpr,
   ppDB, ppDBJIT, ppComm, ppRelatv, ppProd, ppClass, ppReport, ppCtrls, ppPrnabl,
   ppBands, ppCache, ppParameter, Grids, ALIGRID, ppDesignLayer, FXQuery, system.UITypes,
-  AdvGlowButton, ppModule, raCodMod, ppVar, ppStrtch, ppMemo;
+  AdvGlowButton, ppModule, raCodMod, ppVar, ppStrtch, ppMemo, dxGDIPlusClasses;
 
 type
   TFReciboDevolucion = class(TForm)
@@ -73,6 +73,66 @@ type
     ppDesignLayer1: TppDesignLayer;
     ppParameterList1: TppParameterList;
     RadioButton3: TRadioButton;
+    ReporteFijoDuplicado: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel2: TppLabel;
+    ppLabel3: TppLabel;
+    ppLabel4: TppLabel;
+    ppDBText3: TppDBText;
+    ppLabel5: TppLabel;
+    ppLabel6: TppLabel;
+    ppLabel7: TppLabel;
+    ppLabel8: TppLabel;
+    ppLabel9: TppLabel;
+    ppLabel10: TppLabel;
+    ppLabel11: TppLabel;
+    ppLabel12: TppLabel;
+    ppShape2: TppShape;
+    ppVariable3: TppVariable;
+    ppLabel13: TppLabel;
+    ppLabel14: TppLabel;
+    ppVariable4: TppVariable;
+    ppImage1: TppImage;
+    ppHeaderBand2: TppHeaderBand;
+    ppImage2: TppImage;
+    ppVariable5: TppVariable;
+    ppDetailBand2: TppDetailBand;
+    ppSummaryBand3: TppSummaryBand;
+    raCodeModule3: TraCodeModule;
+    ppDesignLayers2: TppDesignLayers;
+    ppDesignLayer2: TppDesignLayer;
+    ppParameterList2: TppParameterList;
+    ReporteFijo: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppShape3: TppShape;
+    ppLabel15: TppLabel;
+    ppLabel16: TppLabel;
+    ppLabel17: TppLabel;
+    ppDBText4: TppDBText;
+    ppLabel18: TppLabel;
+    ppLabel19: TppLabel;
+    ppLabel20: TppLabel;
+    ppLabel22: TppLabel;
+    ppLabel23: TppLabel;
+    ppLabel24: TppLabel;
+    ppLabel25: TppLabel;
+    ppLabel26: TppLabel;
+    ppShape4: TppShape;
+    ppVariable6: TppVariable;
+    ppLabel27: TppLabel;
+    ppLabel28: TppLabel;
+    ppVariable7: TppVariable;
+    ppImage3: TppImage;
+    ppHeaderBand4: TppHeaderBand;
+    ppImage4: TppImage;
+    ppVariable8: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand4: TppSummaryBand;
+    raCodeModule4: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList4: TppParameterList;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4KeyPress(Sender: TObject; var Key: Char);
@@ -124,8 +184,8 @@ begin
     Exit;
   end;
 
-  ImprimirReporte(Reporte, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
-  ImprimirReporte(ReporteDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
+  ImprimirReporte(ReporteFijo, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
+  ImprimirReporte(ReporteFijoDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
 
   Fecha := edit2.Text;
   Fecha := transformarfecha(Fecha);
@@ -309,6 +369,10 @@ var
   I:         Integer;
   J:         Integer;
   TotalParcial: string;
+  Numero:    String;
+  Texto: String;
+  q: TFXQuery;
+
 begin
   Fecha     := Edit2.Text;
   Fecha     := 'Córdoba, ' + FechaEnLetras(Fecha);
@@ -319,6 +383,17 @@ begin
   Importe   := Edit4.Text;
   Letras := Trim(Letras) + ' ($' + Importe + ')';
   Dias      := Edit5.Text;
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
+
   if Radiobutton1.checked then
     TotalParcial := 'TOTAL'
   else if Radiobutton2.checked then
@@ -348,6 +423,8 @@ begin
     Result := edit6.text;
   if aFieldName = 'Inmueble' then
     Result := Combobox1.Text;
+  if aFieldName = 'Numero' then
+    Result := Numero;
   if aFieldName = 'Texto' then
      rESULT := 'Recibi de Salomon Inmobiliaria la suma de PESOS '+ ImporteEnLetras(Importe) + ' ($ ' + Edit4.Text + ') en concepto de devolucion de reserva '+
            'de locacion respecto del inmueble sito en calle '+ Combobox1.text + ' no teniendo nada que reclamar a Salomon Inmobiliaria por ningún concepto ';

@@ -155,7 +155,6 @@ object frmContratos: TfrmContratos
     Style.BorderStyle = ebsNone
     TabOrder = 0
     Transparent = True
-    ExplicitTop = -4
     Height = 430
     Width = 460
     object Label4: TLabel
@@ -278,7 +277,7 @@ object frmContratos: TfrmContratos
       ColCount = 3
       DefaultRowHeight = 17
       FixedCols = 0
-      RowCount = 50
+      RowCount = 1000
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing]
       ParentShowHint = False
       ShowHint = True

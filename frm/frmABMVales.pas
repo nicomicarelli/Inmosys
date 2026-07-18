@@ -50,6 +50,26 @@ type
     constructor Create;
   end;
 
+  TProcesoSaldoAlquiler = class(TThread)
+  private
+    FEnProceso: Boolean;
+    FMaximo: Integer;
+    Conn: TFXConnection; // Si usas FireDAC
+    Query: TFXQuery;
+    SP: TFXQuery;
+
+    procedure MostrarEnMemo;
+    procedure MostrarEnGrilla;
+    procedure AgregarFila;
+    procedure ActualizarProgreso;
+    procedure PrepararProgreso;
+  protected
+    procedure Execute; override;
+    function ConectarBD(RutaBD:string): Boolean;
+  public
+    function EstaEnProceso: Boolean;
+    constructor Create;
+  end;
 
   TfABMVales = class(TForm)
     ImageList1: TImageList;
@@ -199,7 +219,8 @@ var
 
 implementation
 
-uses frmprincipal, frmNuevaCatetgoriaVale, frmNuevoIndicador, frmVales;
+uses frmprincipal, frmNuevaCatetgoriaVale, frmNuevoIndicador, frmVales,
+  frmCubrirValesSaldoAlquiler, frmCubrirValesArreglos;
 
 {$R *.dfm}
 
@@ -225,6 +246,7 @@ begin
     '                from CabezaVales CA ' +
     '               Inner Join CategoriasVales V on V.Codigo = CA.CodigoCategoria '+
     '               Inner Join CuerpoVales CU on CA.Codigo = Cu.Codigo '+
+ //   '               Left Join Inmuebles I on CU.Codinq = I.COdinq '+
     ' where 1=1 ' ;
 
     if Categoria > 0 then
@@ -271,9 +293,19 @@ begin
       cdsDatos.Append;
       cdsDatos.FieldbyName('Codigo').AsInteger := q.FieldByName('Codigo').AsInteger;
       cdsDatos.FieldbyName('Descripcion').AsString := q.FieldByName('Descripcion').AsString;
-      cdsDatos.FieldbyName('Monto').AsFloat := q.FieldByName('MontoPendiente').AsFloat;
-      cdsDatos.FieldbyName('Pendiente').AsFloat := q.FieldByName('MontoPendiente').AsFloat;
-      cdsDatos.FieldbyName('Recuperar').AsFloat := q.FieldByName('Recuperar').AsFloat;
+      if (q.FieldByName('CodigoCategoria').AsInteger <> 19) or (Self = FABMValesSoloInformativos) then
+      begin
+        cdsDatos.FieldbyName('Monto').AsFloat := q.FieldByName('MontoPendiente').AsFloat;
+        cdsDatos.FieldbyName('Pendiente').AsFloat := q.FieldByName('MontoPendiente').AsFloat;
+        cdsDatos.FieldbyName('Recuperar').AsFloat := q.FieldByName('Recuperar').AsFloat;
+      end
+      else
+      begin
+        cdsDatos.FieldbyName('Monto').AsFloat := 0;
+        cdsDatos.FieldbyName('Pendiente').AsFloat := 0;
+        cdsDatos.FieldbyName('Recuperar').AsFloat := 0;
+      end;
+
       cdsDatos.FieldbyName('Mes').AsString := DevuelveMes(q.FieldByName('Mes').AsInteger);
       cdsDatos.FieldbyName('Anio').AsInteger := q.FieldByName('Anio').AsInteger;
       cdsDatos.FieldbyName('Categoria').AsString := q.FieldByName('Categoria').AsString;
@@ -327,6 +359,14 @@ begin
 
   fVales.OnActualizar := prActualizar;
   fVales.Cargar(cdsDatos.FieldbyName('Codigo').asInteger, toModificar);
+  if (Categoria = 2) and (fPrincipal.FUsuario = 'EDUARDO') then
+  begin
+    fVales.btnNuevo.Visible := False;
+    fVales.btnModificar.Visible := False;
+    fVales.btnEliminar.Visible := False;
+    fVales.btnGrabar.Visible := False;
+  end;
+
 end;
 
 procedure TfABMVales.btnNuevoClick(Sender: TObject);
@@ -342,6 +382,13 @@ begin
   fVales.OnActualizar := prActualizar;
   fVales.Categoria := Categoria;
   fVales.Cargar(0, toNuevo);
+  if (Categoria = 2) and (fPrincipal.FUsuario = 'EDUARDO') then
+  begin
+    fVales.btnNuevo.Visible := False;
+    fVales.btnModificar.Visible := False;
+    fVales.btnEliminar.Visible := False;
+    fVales.btnGrabar.Visible := False;
+  end;
 end;
 
 procedure TfABMVales.btnSalirClick(Sender: TObject);
@@ -441,6 +488,8 @@ begin
     fABMValesLocatarioSaliente := nil;
   if Assigned(fABMValesCajaFuerte) then
     fABMValesCajaFuerte := nil;
+  if Assigned(fABMValesSoloInformativos) then
+    fABMValesSoloInformativos := nil;
   if Assigned(fABMValesSaldoAlquiler) then
     fABMValesSaldoAlquiler := nil;
   if Assigned(fABMVales) then
@@ -476,6 +525,39 @@ procedure TfABMVales.FormShow(Sender: TObject);
 begin
   if Self = fABMValesImpuestos then
     TProcesoThread.Create;
+
+  if Self = fABMValesSaldoAlquiler then
+    TProcesoSaldoAlquiler.Create;
+
+//  if Self = fABMValesSaldoAlquiler then
+//  begin
+//    if FCubrirValesSaldoAlquiler = nil then
+//      Application.CreateForm(TFCubrirValesSaldoAlquiler, FCubrirValesSaldoAlquiler)
+//    else
+//      FCubrirValesSaldoAlquiler.Show;
+//    FCubrirValesSaldoAlquiler.boVieneDeHilo := True;
+//    FCubrirValesSaldoAlquiler.Actualizar.Click;
+//    FCubrirValesSaldoAlquiler.SeleccionarTodos1Click(nil);
+//    FCubrirValesSaldoAlquiler.btnImprimirClick(nil);
+//    FCubrirValesSaldoAlquiler.Close;
+//
+//
+//  end;
+  if Self = fABMValesLocatarioSaliente then
+  begin
+    if FCubrirValesArreglos = nil then
+      Application.CreateForm(TFCubrirValesArreglos, FCubrirValesArreglos)
+    else
+      FCubrirValesArreglos.Show;
+    FCubrirValesArreglos.boVieneDeHilo := True;
+    FCubrirValesArreglos.Actualizar.Click;
+    FCubrirValesArreglos.SeleccionarTodos1Click(nil);
+    FCubrirValesArreglos.btnImprimirClick(nil);
+    FCubrirValesArreglos.Close;
+
+
+  end;
+
 end;
 
 procedure TfABMVales.gDatosCustomDrawCell(Sender: TcxCustomGridTableView;
@@ -777,6 +859,211 @@ begin
   fABMValesImpuestos.Progreso.Position := 0;
   fABMValesImpuestos.Progreso.Visible := True;
   fABMValesImpuestos.lbTarea.Visible := True;
+end;
+
+{ TProcesoSaldoAlquiler }
+
+procedure TProcesoSaldoAlquiler.ActualizarProgreso;
+begin
+  fABMValesSaldoAlquiler.Progreso.Position := fABMValesSaldoAlquiler.Progreso.Position + 1;
+  if fABMValesSaldoAlquiler.Progreso.Position = fABMValesSaldoAlquiler.Progreso.Max then
+  begin
+    fABMValesSaldoAlquiler.Progreso.Visible := False;
+    fABMValesSaldoAlquiler.lbTarea.Visible := False;
+  end;
+end;
+
+procedure TProcesoSaldoAlquiler.AgregarFila;
+begin
+
+end;
+
+function TProcesoSaldoAlquiler.ConectarBD(RutaBD: string): Boolean;
+begin
+  with Conn do
+  begin
+    Connected := False;
+    Params.Clear;
+    Params.Add('DriverName=Firebird');
+    Params.Add('Database=' + RutaBD);
+    Params.Add('DriverID=FB');
+    Params.Add('RoleName=RoleName');
+    Params.Add('User_Name=sysdba');
+    Params.Add('Password=masterkey');
+    Params.Add('ServerCharSet=');
+    Params.Add('SQLDialect=3');
+    Params.Add('ErrorResourceFile=');
+    Params.Add('LocaleCode=0000');
+    Params.Add('BlobSize=-1');
+    Params.Add('CommitRetain=False');
+    Params.Add('WaitOnLocks=True');
+    Params.Add('IsolationLevel=ReadCommitted');
+    Params.Add('Trim Char=False');
+    Params.Add('VendorLib=FBClient.dll');
+    Connected := True;
+  end;
+  Result := Conn.Connected;
+end;
+
+constructor TProcesoSaldoAlquiler.Create;
+begin
+  inherited Create(False);
+  FreeOnTerminate := True;
+end;
+
+function TProcesoSaldoAlquiler.EstaEnProceso: Boolean;
+begin
+  Result := FEnProceso;
+end;
+
+procedure TProcesoSaldoAlquiler.Execute;
+var
+  I, J, K: Integer;
+  vBarraLarga, vBarraInterna: string;
+  Ruta: String;
+  Key: char;
+  niLinea: Integer;
+  ndSale, ndEntra: Double;
+begin
+  TThread.Synchronize(nil, procedure
+  begin
+    fABMValesSaldoAlquiler.HiloEnProceso := True;
+    fABMValesSaldoAlquiler.prControlarBotones(False);
+    PrepararProgreso;
+  end);
+  Conn := TFxConnection.Create(nil);
+  Query := TFxQuery.Create(nil);
+  SP := TFxQuery.Create(nil);
+  Ruta := ObtenerRutaBD;
+  try
+    try
+      if ConectarBD(Ruta) then
+      begin
+        Query.Connection := Conn;
+        SP.Connection := Conn;
+      end;
+    except
+      on E: Exception do
+      begin
+        Exit; // Si no hay DB, no podemos seguir con la lógica de cruce
+      end;
+    end;
+
+    Query.SQL.Text :=
+      ' Select DIstinct CA.Fecha as FechaRecibo, R.*, V.Codigo as CodigoVale, v.Descripcion as Vale ' +
+      '   from CuerpoRecibos R '+
+      '  Inner Join CabezaVales V on V.Codinq = R.Codinq and V.Coditem = R.Coditem '+
+      '  Inner Join CabezaRecibos CA on CA.codinq = R.codinq '+
+      '                            and CA.Tipo = R.Tipo '+
+      '                            and CA.Letra = R.Letra '+
+      '                            and CA.numero = R.Numero ';
+
+    Query.SQL.Add(
+      ' where V.CodigoCategoria = 15 '+
+      '   and CA.Fecha >= ''08/01/2023'' '+
+      '   and V.Cerrado = 0 '+
+      '   and R.Tipo <> ''LI'' '+
+      '   and V.Codinq = R.Codinq '+
+      '   and R.Coditem in (''30'') '+
+      '   and V.Coditem in (''30'') '+
+      '   and Substring(R.Periodo from Position(''/'', R.Periodo)+ 1 ) = V.Anio '+
+      '   and Substring(substring(R.PERIODO from 1 for position(''/'', R.PERIODO) - 1) from 13 for 20) = '+
+      '  (case '+
+      '    when V.MES = 1 then ''ENERO'' '+
+      '    when V.MES = 2 then ''FEBRERO'' '+
+      '    when V.MES = 3 then ''MARZO''   '+
+      '    when V.MES = 4 then ''ABRIL''   '+
+      '    when V.MES = 5 then ''MAYO''    '+
+      '    when V.MES = 6 then ''JUNIO''   '+
+      '    when V.MES = 7 then ''JULIO''   '+
+      '    when V.MES = 8 then ''AGOSTO''  '+
+      '    when V.MES = 9 then ''SEPTIEMBRE'' '+
+      '    when V.MES = 10 then ''OCTUBRE''   '+
+      '    when V.MES = 11 then ''NOVIEMBRE'' '+
+      '    when V.MES = 12 then ''DICIEMBRE'' '+
+      '    end) '+
+      '   and not exists (Select Codinq from CuerpoVales '+
+      '   where CODIGOCATEGORIA = 15 and DESCRIPCION = R.Tipo || '' '' || R.Letra || '' '' || Substring(lpad(substring(R.Numero from 1 for Position(''.'', r.numero)-1),12,''0'') '+
+      '    from 1 for 4)||''-''||Substring(lpad(substring(R.Numero from 1 for Position(''.'', r.numero)-1),12,''0'') from 5 for 8) || '' - '' || R.Periodo) ');
+    Query.SQL.Add(' order by Fecha ');
+    Query.Open;
+
+    FMaximo := Query.RecordCount;
+    Synchronize(PrepararProgreso);
+    try
+      while not Query.eof do
+      begin
+          Conn.StartTransaction;
+          SP.SQL.Text := ' Select Max(Linea) + 1 as Linea from CuerpoVales where codigo=:Codigo';
+          SP.ParamByName('CODIGO').AsInteger := query.FieldByName('CodigoVale').AsInteger;
+          SP.Open;
+
+          niLinea  := SP.FieldByName('Linea').AsInteger;
+          ndSale   := ToFloat(Query.FieldByName('Importe').AsString);
+          ndEntra  := 0;
+
+    SP.SQL.Text :=
+      ' INSERT INTO CUERPOVALES (CODIGO, CODINQ, FECHA, LINEA, CODIGOITEM, DESCRIPCION, ENTRA, SALE, ID, USUARIO, ESMANUAL, PASADOACAJA) '+
+      ' VALUES (:CODIGO, :CODINQ, :FECHA, :LINEA, :CODIGOITEM, :DESCRIPCION, :ENTRA, :SALE, :ID, :USUARIO, :ESMANUAL, :PASADOACAJA)';
+    SP.ParamByName('Codigo').AsInteger  := Query.FieldbyName('CodigoVale').AsInteger;
+    SP.ParamByName('Codinq').AsString  := Query.FieldByName('Codinq').AsString;
+    SP.ParamByName('Fecha').AsDatetime  := Query.FieldByName('FechaRecibo').AsDatetime;
+    SP.ParamByName('Linea').AsInteger  := niLinea;
+    SP.ParamByName('CodigoItem').AsString  := '95';
+    SP.ParamByName('Descripcion').AsString :=  Query.FieldByName('Tipo').AsString + ' ' + Query.FieldByName('Letra').AsString + ' ' + FormatFloat('0000-00000000', query.FieldByName('Numero').AsFloat) + ' - ' + Query.FieldByName('Periodo').AsString;
+    SP.ParamByName('Entra').AsFloat :=  0;
+    SP.ParamByName('Sale').AsFloat :=  ndSale;
+    SP.ParamByName('ID').AsString := '0';
+    SP.ParamByName('USUARIO').AsString := fPrincipal.FUsuario;
+    SP.ParamByName('ESMANUAL').AsInteger := 1;
+    SP.ParamByName('PASADOACAJA').AsInteger := 1;
+    SP.ExecSQL;
+//          InsertarCuerpoVale(Query.FieldbyName('CodigoVale').AsInteger,
+//                             niLinea,
+//                             Query.FieldByName('Codinq').AsString,
+//                             '95',
+//                             Query.FieldByName('Tipo').AsString + ' ' + Query.FieldByName('Letra').AsString + ' ' + FormatFloat('0000-00000000', query.FieldByName('Numero').AsFloat) + ' - ' + Query.FieldByName('Periodo').AsString,
+//                             Query.FieldByName('FechaRecibo').AsDatetime,
+//                             ndEntra, ndSale, '0', 1, 1);
+
+        Conn.Commit;
+        Query.Next;
+        Synchronize(ActualizarProgreso);
+      end;
+    Except
+      Conn.Rollback;
+    end;
+  finally
+    Query.Free;
+    SP.Free;
+    Conn.Connected := False;
+    Conn.Free;
+    TThread.Synchronize(nil, procedure
+    begin
+      fABMValesSaldoAlquiler.HiloEnProceso := False;
+      fABMValesSaldoAlquiler.prControlarBotones(True);
+      fABMValesSaldoAlquiler.ActualizarClick(nil);
+    end);
+  end;
+end;
+
+procedure TProcesoSaldoAlquiler.MostrarEnGrilla;
+begin
+
+end;
+
+procedure TProcesoSaldoAlquiler.MostrarEnMemo;
+begin
+
+end;
+
+procedure TProcesoSaldoAlquiler.PrepararProgreso;
+begin
+  fABMValesSaldoAlquiler.Progreso.Min := 0;
+  fABMValesSaldoAlquiler.Progreso.Max := FMaximo;
+  fABMValesSaldoAlquiler.Progreso.Position := 0;
+  fABMValesSaldoAlquiler.Progreso.Visible := True;
+  fABMValesSaldoAlquiler.lbTarea.Visible := True;
 end;
 
 end.

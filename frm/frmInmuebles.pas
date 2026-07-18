@@ -122,6 +122,7 @@ type
     Label16: TLabel;
     Label17: TLabel;
     memObservaciones: TMemo;
+    chRenueva: TCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit7KeyPress(Sender: TObject; var Key: Char);
@@ -417,6 +418,7 @@ begin
         chPrelegales.Checked := FieldbyName('Prelegales').AsInteger = 1;
         chDevuelveDiferencias.Checked := FieldbyName('DevuelveDiferencias').AsInteger = 1;
         chDesocupado.Checked := FieldbyName('Desocupado').AsInteger = 1;
+        chRenueva.Checked := FieldbyName('Renueva').AsInteger = 1;
 
         chLegales.OnClick := nil;
         chLegales.Checked := FieldbyName('Legales').AsInteger = 1;
@@ -934,11 +936,11 @@ begin
           q.SQL.text := 'Insert into Inmuebles(Codinq, Inquilino, Telefono, propietario, Domicilio, FechaInicio, FechaFin, ' +
            ' ubicacion, Alquiler, FechaPago, Liquidacion, DNIPropietario, Referente, RazonSocial, entregarimpuestos, Tributa, '+
            ' Activo, MailPropietario, MailInquilino, PlantillaPropietario, PlantillaInquilino, DniInquilino, DNIReferente, PuedeTransferir, Prelegales, DevuelveDiferencias, Desocupado, '+
-           ' Legales, Rescinde, Sedesocupa, JuicioDesalojo, JuicioPVE, DescuentaGastos, TienePresupuestos, CUENTABANCARIA, PorcentajeGastoBancario, NomenclaturaCatastral, unidadfuncional, numerocuenta, Observaciones) ' +
+           ' Legales, Rescinde, Sedesocupa, JuicioDesalojo, JuicioPVE, DescuentaGastos, TienePresupuestos, CUENTABANCARIA, PorcentajeGastoBancario, NomenclaturaCatastral, unidadfuncional, numerocuenta, Observaciones, Renueva) ' +
            '             Values (:Codinq, :Inquilino, :Telefono, :propietario, :Domicilio, :FechaInicio, :FechaFin, ' +
            ' :ubicacion, :Alquiler, :FechaPago, :Liquidacion, :DNIPropietario, :Referente, :RazonSocial, '+
            ' :entregarimpuestos, :Tributa, :Activo, :MailPropietario, :MailInquilino, :PlantillaPropietario, :PlantillaInquilino, :DNIInquilino, :DNIReferente, :PuedeTransferir, :Prelegales, :DevuelveDiferencias, :Desocupado, '+
-           ' :Legales, :Rescinde, :Sedesocupa, :JuicioDesalojo, :JuicioPVE, :DescuentaGastos, :TienePresupuestos, :CUENTABANCARIA, :PorcentajeGastoBancario, :NomenclaturaCatastral, :unidadfuncional, :numerocuenta, :Observaciones) ';
+           ' :Legales, :Rescinde, :Sedesocupa, :JuicioDesalojo, :JuicioPVE, :DescuentaGastos, :TienePresupuestos, :CUENTABANCARIA, :PorcentajeGastoBancario, :NomenclaturaCatastral, :unidadfuncional, :numerocuenta, :Observaciones, :Renueva) ';
           q.ParambyName('Codinq').AsString  := Edit1.Text;
           q.ParambyName('Inquilino').AsString  := Trim(Edit2.Text);
           q.ParambyName('Telefono').AsString  := Edit5.Text;
@@ -994,6 +996,7 @@ begin
           q.ParambyName('DevuelveDiferencias').AsInteger  := BoolToInt(chDevuelveDiferencias.Checked);
           q.ParambyName('Desocupado').AsInteger  := BoolToInt(chDesocupado.Checked);
 
+          q.ParambyName('Renueva').AsInteger  := BoolToInt(chRenueva.Checked);
           q.ParambyName('Legales').AsInteger  := BoolToInt(chLegales.Checked);
           q.ParambyName('Rescinde').AsInteger  := BoolToInt(chRescinde.Checked);
           q.ParambyName('SeDesocupa').AsInteger  := BoolToInt(chSeDesocupa.Checked);
@@ -1058,6 +1061,7 @@ begin
                                         ' UnidadFuncional = :UnidadFuncional, '+
                                         ' NumeroCuenta = :NumeroCuenta, '+
                                         ' Observaciones = :Observaciones, '+
+                                        ' Renueva = :Renueva, '+
                                         ' PorcentajeGastoBancario = :PorcentajeGastoBancario '+
                                         ' Where codinq =:Codinq');
           q.ParambyName('Codinq').AsString  := Edit1.Text;
@@ -1116,6 +1120,7 @@ begin
           q.ParambyName('SeDesocupa').AsInteger  := BoolToInt(chSeDesocupa.Checked);
           q.ParambyName('JuicioDesalojo').AsInteger  := BoolToInt(chJuicioDesalojo.Checked);
           q.ParambyName('JuicioPVE').AsInteger  := BoolToInt(chJuicioPVE.Checked);
+          q.ParambyName('Renueva').AsInteger  := BoolToInt(chRenueva.Checked);
           q.ParambyName('DescuentaGastos').AsInteger  := BoolToInt(chDescuentaGastos.Checked);
           q.ParambyName('TienePresupuestos').AsInteger  := BoolToInt(chTienePresupuestos.Checked);
           q.ParambyName('CuentaBancaria').AsInteger  := CBOCtaBancaria.ItemIndex;

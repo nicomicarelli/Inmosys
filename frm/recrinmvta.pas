@@ -155,6 +155,8 @@ type
     ppDesignLayers4: TppDesignLayers;
     ppDesignLayer4: TppDesignLayer;
     ppParameterList4: TppParameterList;
+    plDatosppField5: TppField;
+    plDatosppField10: TppField;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4KeyPress(Sender: TObject; var Key: Char);
@@ -182,8 +184,8 @@ uses FrmPrincipal, FrmDatos, Funciones;
 {$R *.DFM}
 procedure Tfrecrinmvta.btnImprimirClick(Sender: TObject);
 begin
-  ImprimirReporte(Reporte, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
-  ImprimirReporte(ReporteDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
+  ImprimirReporte(ReporteFijo, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
+  ImprimirReporte(ReporteFijoDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
 end;
 
 procedure Tfrecrinmvta.btnSalirClick(Sender: TObject);
@@ -279,8 +281,10 @@ var
   I:           Integer;
   J:           Integer;
   Monto:       Currency;
-  Numero:      Integer;
-  q     :      TFXQuery;
+  Numero:    String;
+  Texto: String;
+  q: TFXQuery;
+
 begin
   Inquilino := Edit3.Text;
   Ubicacion := Combobox1.Text;
@@ -299,6 +303,27 @@ begin
     Letras := Letras + '-';
   for I := J to 120 do
     Escribania := Escribania + '/';
+  Texto := 'Son Pesos: ' + Letras +'(' + Floattostr(Monto) + ')' + #13#10+
+           'Reserva del inmueble ubicado en calle ' + Combobox1.Text  + ' que se compromete adquirir por el precio total de ' + Edit7.text  +
+           ' La correspondiente escritura deberá firmarse el ' + Edit6.text + ' en la escribanía ' + Edit5.text +
+           ' quien interviene en esta operación y cobrará en dicho acto el monto correspondiente a la escritura traslativa de dominio y el 3% '+
+           ' en concepto de comisión al corredor inmobiliario sobre el total de la venta. Si en la fecha indicada precedentemente el presunto comprador '+
+           ' no se presentara a firmar la escritura respectiva, o si la operación no pudiera concretarse por cualquier motivo que presenten las partes, '+
+           'la suma entregada será devuelta y el propietario del inmueble podrá disponer libremente de la propiedad motivo de la presente.'+
+           #13#10+
+           #13#10+
+           'De conformidad con los términos del presente recibo.';
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
+
 
   if afieldName='Fecha' then
     Result := Fecha;
@@ -316,16 +341,10 @@ begin
     Result := Ubicacion;
   if afieldName='Escribania' then
     Result := Escribania;
-  q := CrearQuery;
-  try
-    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
-    q.Open;
-
-    Result := Inttostr(q.FieldByName('Cantidad').AsInteger);
-  finally
-    FreeAndNil(q);
-  end;
-
+  if aFieldName = 'Texto' then
+    Result := Texto;
+  if aFieldName = 'Numero' then
+    Result := Numero;
 end;
 
 

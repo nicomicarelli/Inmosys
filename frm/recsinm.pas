@@ -8,7 +8,7 @@ uses
   Funciones, ImgList, ComCtrls, ToolWin, sqlExpr,
   ppDB, ppDBJIT, ppComm, ppRelatv, ppProd, ppClass, ppReport, ppCtrls, ppPrnabl,
   ppBands, ppCache, ppParameter, Grids, ALIGRID, ppDesignLayer, FXQuery, system.UITypes,
-  AdvGlowButton;
+  AdvGlowButton, ppModule, raCodMod, dxGDIPlusClasses, ppVar;
 
 type
   Tfrecsinm = class(TForm)
@@ -83,6 +83,68 @@ type
     Edit4: TEdit;
     cbxDatoFijo: TComboBox;
     edtCodigo: TEdit;
+    ReporteFijo: TppReport;
+    ppTitleBand2: TppTitleBand;
+    ppShape3: TppShape;
+    ppLabel29: TppLabel;
+    ppLabel30: TppLabel;
+    ppLabel31: TppLabel;
+    ppDBText13: TppDBText;
+    ppLabel32: TppLabel;
+    ppLabel33: TppLabel;
+    ppLabel34: TppLabel;
+    ppLabel35: TppLabel;
+    ppLabel36: TppLabel;
+    ppLabel37: TppLabel;
+    ppLabel38: TppLabel;
+    ppLabel39: TppLabel;
+    ppShape4: TppShape;
+    ppVariable4: TppVariable;
+    ppLabel40: TppLabel;
+    ppLabel41: TppLabel;
+    ppVariable5: TppVariable;
+    ppImage3: TppImage;
+    ppHeaderBand4: TppHeaderBand;
+    ppImage4: TppImage;
+    ppVariable6: TppVariable;
+    ppDetailBand4: TppDetailBand;
+    ppSummaryBand2: TppSummaryBand;
+    raCodeModule2: TraCodeModule;
+    ppDesignLayers4: TppDesignLayers;
+    ppDesignLayer4: TppDesignLayer;
+    ppParameterList4: TppParameterList;
+    ReporteFijoDuplicado: TppReport;
+    ppTitleBand1: TppTitleBand;
+    ppShape1: TppShape;
+    ppLabel25: TppLabel;
+    ppLabel26: TppLabel;
+    ppLabel27: TppLabel;
+    ppDBText14: TppDBText;
+    ppLabel28: TppLabel;
+    ppLabel42: TppLabel;
+    ppLabel43: TppLabel;
+    ppLabel44: TppLabel;
+    ppLabel45: TppLabel;
+    ppLabel46: TppLabel;
+    ppLabel47: TppLabel;
+    ppLabel48: TppLabel;
+    ppShape2: TppShape;
+    ppVariable1: TppVariable;
+    ppLabel49: TppLabel;
+    ppLabel50: TppLabel;
+    ppVariable2: TppVariable;
+    ppImage1: TppImage;
+    ppHeaderBand3: TppHeaderBand;
+    ppImage2: TppImage;
+    ppVariable3: TppVariable;
+    ppDetailBand3: TppDetailBand;
+    ppSummaryBand1: TppSummaryBand;
+    raCodeModule1: TraCodeModule;
+    ppDesignLayers3: TppDesignLayers;
+    ppDesignLayer3: TppDesignLayer;
+    ppParameterList3: TppParameterList;
+    plDatosppField7: TppField;
+    plDatosppField8: TppField;
     gImpresion: TStringAlignGrid;
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
@@ -126,15 +188,31 @@ var
   fecha: string;
   Importe: string;
   Monto: Currency;
+  Texto: string;
+  Numero: String;
+  q: TFXQuery;
 begin
-  ImprimirReporte(Reporte, nil,nil,'',false,'',nil,'','Recibo de Seña ORIGINAL');
-  ImprimirReporte(ReporteDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
-
   Fecha := edit2.Text;
   Fecha := transformarfecha(Fecha);
   Fecha := 'Córdoba, ' + Fecha;
   Importe := edit4.Text;
   Monto := ToFloat(Importe);
+
+  Texto := 'Seña y por el lapso de ' + edit5.Text + '. Todo referido al inmueble ubicado en calle '+
+           Combobox1.Text + '. Acogiendose ambos interesados a lo dispuesto por los  art. 1059  y 1060 del Código Civil (De las obligaciones '+
+           'en general). Asimismo estará sujeta a pérdida de la misma en caso de incumplimiento y/o satisfacción de los informes solicitados por la inmobiliaria. También las partes acuerdan que el interesado '+
+           'deberá abonar la comisión inmobiliaria liberando a la parte locadora de la carga estipulada en el artículo 1209 de la ley 26.994.-' +
+           'De conformidad con los terminos del presente recibo ';
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
 
   gImpresion.Vaciar;
   gImpresion.Cells[0,1] := edit1.Text;
@@ -148,6 +226,11 @@ begin
   gImpresion.Cells[8,1] := '$ ' + edit4.Text;
   gImpresion.Cells[9,1] := ImporteEnLetras(Monto);
   gImpresion.Cells[10,1] := edtCodigo.Text;
+  gImpresion.Cells[13,1] := Texto;
+  gImpresion.Cells[14,1] := Numero;
+
+  ImprimirReporte(ReporteFijo, NIL,NIL,'',false,'',nil,'','Recibo de Seña ORIGINAL');
+  ImprimirReporte(ReporteFijoDuplicado, nil,nil,'',false,'',nil,'','Recibo de Seña DUPLICADO');
 
 
   if fConfirmacionRecibos = nil then
@@ -313,6 +396,9 @@ var
   I:         Integer;
   J:         Integer;
   Monto:     Currency;
+  Numero:    String;
+  Texto: String;
+  q: TFXQuery;
 begin
   Fecha     := Edit2.Text;
   Fecha     := 'Córdoba, ' + FechaEnLetras(Fecha);
@@ -326,6 +412,22 @@ begin
   Importe   := Edit4.Text;
   Dias      := Edit5.Text;
 
+  Texto := 'Son Pesos: ' + Letras +'(' + Floattostr(Monto) + ')' + #13#10+
+           'Seña y por el lapso de ' + edit5.Text + '. Todo referido al inmueble ubicado en calle '+
+           Combobox1.Text + '. Acogiendose ambos interesados a lo dispuesto por los  art. 1059  y 1060 del Código Civil (De las obligaciones '+
+           'en general). Asimismo estará sujeta a pérdida de la misma en caso de incumplimiento y/o satisfacción de los informes solicitados por la inmobiliaria. También las partes acuerdan que el interesado '+
+           'deberá abonar la comisión inmobiliaria liberando a la parte locadora de la carga estipulada en el artículo 1209 de la ley 26.994.-' +
+           'De conformidad con los terminos del presente recibo ';
+
+  q := CrearQuery;
+  try
+    q.SQL.Text := 'Select Count(*) + 1 as Cantidad from Cabezarecibos where Tipo = ''RE'' ';
+    q.Open;
+
+    Numero := Inttostr(q.FieldByName('Cantidad').AsInteger);
+  finally
+    FreeAndNil(q);
+  end;
 
   if aFieldName = 'Fecha' then
     Result := Fecha;
@@ -339,6 +441,12 @@ begin
     Result := Dias;
   if aFieldName = 'Inmueble' then
     Result := Combobox1.Text;
+  if aFieldName = 'Texto' then
+    Result := Texto;
+  if aFieldName = 'Numero' then
+    Result := Numero;
+
+
 end;
 
 procedure Tfrecsinm.Edit5KeyPress(Sender: TObject; var Key: Char);

@@ -687,7 +687,6 @@ object fInmuebles: TfInmuebles
         object cxTabSheet2: TcxTabSheet
           Caption = 'Adicionales'
           ImageIndex = 1
-          ExplicitLeft = 5
           object Label13: TLabel
             Left = 11
             Top = 291
@@ -996,6 +995,14 @@ object fInmuebles: TfInmuebles
             Lines.Strings = (
               '')
             TabOrder = 23
+          end
+          object chRenueva: TCheckBox
+            Left = 12
+            Top = 105
+            Width = 157
+            Height = 17
+            Caption = 'Renueva Contrato'
+            TabOrder = 24
           end
         end
       end
